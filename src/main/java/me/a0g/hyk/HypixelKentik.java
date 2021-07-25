@@ -43,8 +43,6 @@ public class HypixelKentik
 
     private HyConfig hyConfig = new HyConfig();
 
-   // private boolean onHypixel;
-
     public final KeyBinding[] keyBindings = new KeyBinding[4];
 
     public static int titleTimer = -1;
