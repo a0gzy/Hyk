@@ -55,6 +55,29 @@ public class HyConfig extends Vigilant {
     )
     private boolean daynreal = false;
 
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Mute button",
+            category = "General",
+            subcategory = "General",
+            description = "Button in inventory for game muting."
+    )
+    private boolean gamemute = false;
+
+    @Property(
+            type = PropertyType.PERCENT_SLIDER,
+            name = "Gamemutefloat",
+            category = "General",
+            subcategory = "General",
+            description = "Button in inventory for game muting.",
+            hidden = true
+    )
+    private float gamemutefloat = 0;
+
+
+
+
     @Property(
             type = PropertyType.SWITCH,
             name = "ArmorHud",

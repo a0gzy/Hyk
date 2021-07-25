@@ -15,7 +15,7 @@ Minecraft Mod
     ```
    
 4. Make sure to add the **VM** arguments to your debug configuration:
-    
+
    **If you dont have them already!**
     
     ```text

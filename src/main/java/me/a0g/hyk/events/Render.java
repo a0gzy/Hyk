@@ -1,5 +1,6 @@
 package me.a0g.hyk.events;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,13 +19,15 @@ import me.a0g.hyk.gui.HykGui;
 import me.a0g.hyk.utils.ChromaManager;
 import me.a0g.hyk.utils.NewScheduler;
 import me.a0g.hyk.utils.TextUtils;
+import me.a0g.hyk.utils.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiPlayerTabOverlay;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiChest;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -40,10 +43,11 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.settings.KeyBinding;
+import org.fusesource.jansi.Ansi;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import scala.Int;
@@ -568,10 +572,77 @@ public class Render {
 						}
 					}
 				}
-
-
 			}
 		}
+	}
+
+	//public static boolean isMuted
+
+	@SubscribeEvent
+	public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
+
+		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiInventory && main.getHyConfig().isGamemute()){
+
+
+			//main.getUtils().drawModalRectWithCustomSizedTexture();
+			ScaledResolution sr = new ScaledResolution(mc);
+
+
+			//FMLLog.info("Y");
+			Gui.drawRect(sr.getScaledWidth()/2 - 20,28, sr.getScaledWidth()/2 +20,40, Color.WHITE.getRGB());
+
+			if(!HyK.ismuted) {
+				new TextRenderer(mc, "Mute", sr.getScaledWidth()/2 - 10, 30, 1,Color.pink.getRGB());
+			}
+			else {
+				new TextRenderer(mc, "UnMute", sr.getScaledWidth()/2 - 17, 30, 1,Color.pink.getRGB());
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onGuiDraw(GuiScreenEvent.MouseInputEvent.Post event) {
+
+
+
+		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiInventory && main.getHyConfig().isGamemute()){
+
+			ScaledResolution sr = new ScaledResolution(mc);
+			GuiScreen guiScreen = Minecraft.getMinecraft().currentScreen;
+			int mouseX = Mouse.getX() * sr.getScaledWidth() / Minecraft.getMinecraft().displayWidth;
+			int mouseY = sr.getScaledHeight() - Mouse.getY() * sr.getScaledHeight() / Minecraft.getMinecraft().displayHeight - 1;
+			boolean hoveringButton = false;
+
+			if(mouseX >= sr.getScaledWidth()/2 - 20 && mouseX <= sr.getScaledWidth()/2 + 20 &&
+					mouseY >= 28 && mouseY <= 40 && Mouse.isButtonDown(0)){
+
+				if(HyK.ismuted){
+					float value = main.getHyConfig().getGamemutefloat();
+					Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,value);
+				}
+				else {
+					main.getHyConfig().setGamemutefloat(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER));
+					main.getHyConfig().markDirty();
+					main.getHyConfig().writeData();
+					Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0);
+				}
+				HyK.ismuted = !HyK.ismuted;
+				//FMLLog.info("Y");
+			}
+		}
+	}
+
+	private static boolean shouldRenderOverlay(Gui gui) {
+		boolean validGui = gui instanceof GuiContainer;
+		if(gui instanceof GuiChest) {
+			GuiChest eventGui = (GuiChest) gui;
+			ContainerChest cc = (ContainerChest) eventGui.inventorySlots;
+			String containerName = cc.getLowerChestInventory().getDisplayName().getUnformattedText();
+			if(containerName.trim().equals("Fast Travel")) {
+				validGui = false;
+			}
+		}
+		return validGui;
 	}
 
 }
