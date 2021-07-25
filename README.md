@@ -13,14 +13,7 @@ Minecraft Mod
     ```shell script
     gradlew idea genIntellijRuns
     ```
-    - Eclipse **(doesn't generate debug configuration)**
-    ```shell script
-    gradlew eclipse
-    ```
-    - (Eclipse) Change **Text File Encoding** from `Default` to `UTF-8`
-        - Go to `Window` -> `Preferences` -> `General` -> `Workspace`
-        - Change `Text File Encoding` from `Default` to `UTF-8`
-
+   
 4. Make sure to add the **VM** arguments to your debug configuration:
     ```text
     -Dfml.coreMods.load=me.a0g.hyk.tweaker.ASMTweaker
