@@ -1,0 +1,16 @@
+[
+{
+  "modid": "hyk",
+  "name": "HyK",
+  "description": "Beautiful stuff.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["a0g"],
+  "credits": "For a0g and a0g",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

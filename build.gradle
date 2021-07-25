@@ -1,0 +1,183 @@
+plugins {
+    id "java"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id "net.minecraftforge.gradle.forge" version "6f53277"
+}
+
+version = "2.0"
+group= "me.a0g"
+archivesBaseName = "hyk"
+
+sourceCompatibility = targetCompatibility = 1.8
+compileJava.options.encoding = 'UTF-8'
+
+
+minecraft {
+    version = "1.8.9-11.15.1.2318-1.8.9"
+    runDir = "run"
+    mappings = "stable_22"
+    makeObfSourceJar = false
+    clientRunArgs += ["--tweakClass=gg.essential.loader.stage0.EssentialSetupTweaker"]
+    clientJvmArgs += "-Dfml.coreMods.load=me.a0g.hyk.tweaker.ASMTweaker"
+}
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+repositories {
+    //jcenter()
+    mavenCentral()
+    maven { url "https://repo.sk1er.club/repository/maven-public" }
+    maven { url 'https://repo.spongepowered.org/maven' }
+    maven {
+        name = "Jitpack"
+        url = "https://jitpack.io/"
+    }
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.20'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    //compile  "club.minnced:java-discord-rpc:2.0.1"
+
+
+   /* implementation('com.github.jagrosh:DiscordIPC:e29d6d8') {
+        exclude module: 'log4j'
+    }
+*/
+    embed('com.github.jagrosh:DiscordIPC:e29d6d8') {
+        exclude module: 'log4j'
+    }
+
+   // include fileTree('libs')
+
+   // embed "gg.essential:loader-launchwrapper:1.0.2"
+
+    embed "gg.essential:loader-launchwrapper:1.0.2"
+    //implementation "gg.essential:Essential:1221-10809-SNAPSHOT"
+    implementation "gg.essential:essential-1.8.9-forge:1234"
+
+
+}
+
+/**
+ * This task simply replaces the `${version}` and `${mcversion}` properties in the mcmod.info with the data from Gradle
+ */
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+/**
+ * This task simply moves resources so they can be accessed at runtime, Forge is quite weird isn't it
+ */
+task moveResources {
+    doLast {
+        ant.move file: "${buildDir}/resources/main",
+                todir: "${buildDir}/classes/java"
+    }
+}
+
+moveResources.dependsOn processResources
+classes.dependsOn moveResources
+
+jar {
+    dependsOn configurations.compile
+    archiveFileName = "hyk-2.0.jar";
+    from({
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }) {
+        exclude 'club.sk1er.vigilance.example.ExampleMod', 'dummyThing'
+        def i = 0
+        filesMatching("META-INF/NOTICE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/LICENSE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/mods.toml") { name = "$name.${i++}" }
+        filesMatching("LICENSE*") { name = "$name.${i++}" }
+
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    manifest {
+        attributes(
+                "ModSide": "CLIENT",
+                "FMLCorePluginContainsFMLMod": "Yes, yes it does"
+        )
+
+    }
+    manifest {
+        attributes(
+                "FMLCorePluginContainsFMLMod": "true",
+                "ForceLoadAsMod": "true",
+                "FMLCorePlugin": "me.a0g.hyk.tweaker.ASMTweaker",
+                "ModSide": "CLIENT",
+                "FMLAT": "hyk_at.cfg"
+        )
+    }
+   // enabled = false
+
+}
+
+// This adds support to ("embed", "shade", "include") libraries into our JAR
+/*
+shadowJar {
+    archiveFileName = jar.archiveFileName
+    archiveClassifier.set('')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+
+    exclude('dummyThing')
+    exclude('META-INF/maven/')
+    exclude('META-INF/nar/')
+    exclude('module-info.class')
+    exclude('META-INF/versions/')
+    exclude('lombok-1.18.20.jar')
+
+    dependencies {
+        exclude(dependency('gg.essential::'))
+        exclude(dependency('gg.essential.lib::'))
+        exclude(dependency('org.jetbrains.kotlin::'))
+        exclude(dependency('com.github.KevinPriv::'))
+        exclude(dependency('org.bitlet::'))
+        exclude(dependency('com.github.videogame-hacker::'))
+        exclude(dependency('org.kodein.di::'))
+        exclude(dependency('org.spongepowered::'))
+
+    }
+
+
+}*/
+
+/*task copyLicenses (type: Copy) {
+    from(project.projectDir) {
+        include('LICENSE')
+        include('NOTICE')
+        include('dependencyLicenses/**')
+    }
+    into(sourceSets.main.output.resourcesDir)
+}
+
+
+tasks.jar.dependsOn(tasks.copyLicenses)
+tasks.reobfJar.dependsOn(tasks.shadowJar)*/
