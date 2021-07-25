@@ -25,4 +25,5 @@ Minecraft Mod
     ```
    > **Note:** Don't share your password with **anyone**.
    > **We aren't going to ask you about your password!**
-6. **You are now ready to build the mod!**
+6.  Reload Gradle
+7.  **You are now ready to build the mod!**
