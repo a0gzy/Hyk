@@ -35,13 +35,12 @@ import org.lwjgl.input.Keyboard;
 
 @Getter
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
-public class HypixelKentik
-{
+public class HypixelKentik {
     public static final String MODID = "hyk";
     public static final String VERSION = "2.0";
     public static final String NAME = "HyK";
 
-    private HyConfig hyConfig = new HyConfig();
+    private final HyConfig hyConfig = new HyConfig();
 
     public final KeyBinding[] keyBindings = new KeyBinding[4];
 
@@ -49,19 +48,20 @@ public class HypixelKentik
     public static boolean showTitle = false;
     public static String titleText = "";
 
-    @Getter private static HypixelKentik instance;
+    @Getter
+    private static HypixelKentik instance;
 
-    private Utils utils;
+    private final Utils utils;
 
-    private TabCompletionUtil tabutil;
+    private final TabCompletionUtil tabutil;
 
-    private ApiUtils apiUtils;
+    private final ApiUtils apiUtils;
 
-    private TextUtils textUtils;
+    private final TextUtils textUtils;
 
-    private NewScheduler newScheduler;
+    private final NewScheduler newScheduler;
 
-    private DiscordRPCManager discordRPCManager;
+    private final DiscordRPCManager discordRPCManager;
 
     public HypixelKentik() {
         instance = this;
@@ -75,69 +75,66 @@ public class HypixelKentik
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         hyConfig.preload();
 
+        MinecraftForge.EVENT_BUS.register(this);
+        ClientCommandHandler.instance.registerCommand(new HyK());
+        ClientCommandHandler.instance.registerCommand(new GetBw());
+        ClientCommandHandler.instance.registerCommand(new GetNetworkStats());
+        ClientCommandHandler.instance.registerCommand(new GetSw());
+        ClientCommandHandler.instance.registerCommand(new GetSwAll());
+        ClientCommandHandler.instance.registerCommand(new GetBwAll());
+        ClientCommandHandler.instance.registerCommand(new SlotNbt());
+        ClientCommandHandler.instance.registerCommand(new RemoveEntity());
+        ClientCommandHandler.instance.registerCommand(new GetSmash());
+        ClientCommandHandler.instance.registerCommand(new SbStats());
 
-         MinecraftForge.EVENT_BUS.register(this);
- 		 ClientCommandHandler.instance.registerCommand(new HyK());
- 		 ClientCommandHandler.instance.registerCommand(new GetBw());
- 		 ClientCommandHandler.instance.registerCommand(new GetNetworkStats());
- 		 ClientCommandHandler.instance.registerCommand(new GetSw());
- 		 ClientCommandHandler.instance.registerCommand(new GetSwAll());
-         ClientCommandHandler.instance.registerCommand(new GetBwAll());
-         ClientCommandHandler.instance.registerCommand(new SlotNbt());
-         ClientCommandHandler.instance.registerCommand(new RemoveEntity());
-         ClientCommandHandler.instance.registerCommand(new GetSmash());
-         ClientCommandHandler.instance.registerCommand(new SbStats());
-
-         //events
-         MinecraftForge.EVENT_BUS.register(new EventKey());
-         MinecraftForge.EVENT_BUS.register(new DianaEvent());
-         MinecraftForge.EVENT_BUS.register(new Cakes());
-         MinecraftForge.EVENT_BUS.register(new Render());
+        //events
+        MinecraftForge.EVENT_BUS.register(new EventKey());
+        MinecraftForge.EVENT_BUS.register(new DianaEvent());
+        MinecraftForge.EVENT_BUS.register(new Cakes());
+        MinecraftForge.EVENT_BUS.register(new Render());
 //         MinecraftForge.EVENT_BUS.register(new Puzzler());
 
-         //chest
-         MinecraftForge.EVENT_BUS.register(new ChestTest());
-         MinecraftForge.EVENT_BUS.register(new Player());
-         MinecraftForge.EVENT_BUS.register(new NameT());
-         MinecraftForge.EVENT_BUS.register(new Skull());
-         MinecraftForge.EVENT_BUS.register(new FairyTest());
-         MinecraftForge.EVENT_BUS.register(new BatSp());
-         MinecraftForge.EVENT_BUS.register(new Presents());
+        //chest
+        MinecraftForge.EVENT_BUS.register(new ChestTest());
+        MinecraftForge.EVENT_BUS.register(new Player());
+        MinecraftForge.EVENT_BUS.register(new NameT());
+        MinecraftForge.EVENT_BUS.register(new Skull());
+        MinecraftForge.EVENT_BUS.register(new FairyTest());
+        MinecraftForge.EVENT_BUS.register(new BatSp());
+        MinecraftForge.EVENT_BUS.register(new Presents());
 
 
-         MinecraftForge.EVENT_BUS.register(new BankHook());
-         MinecraftForge.EVENT_BUS.register(new SwHook());
+        MinecraftForge.EVENT_BUS.register(new BankHook());
+        MinecraftForge.EVENT_BUS.register(new SwHook());
 
-         //gui
-         ClientCommandHandler.instance.registerCommand(new Move());
-         ClientCommandHandler.instance.registerCommand(new Scale());
+        //gui
+        ClientCommandHandler.instance.registerCommand(new Move());
+        ClientCommandHandler.instance.registerCommand(new Scale());
 
-         Move.mainXY[0] = hyConfig.getMainx();
-         Move.mainXY[1] = hyConfig.getMainy();
-         Move.cakeXY[0] = hyConfig.getCakex();
-         Move.cakeXY[1] = hyConfig.getCakey();
-         Move.armorXY[0] = hyConfig.getArmorx();
-         Move.armorXY[1] = hyConfig.getArmory();
-         Move.commsXY[0] = hyConfig.getCommsx();
-         Move.commsXY[1] = hyConfig.getCommsy();
-         Scale.mainScale = Double.parseDouble( hyConfig.getScale() );
-         Scale.sizerScale = Double.parseDouble( hyConfig.getSizescale() );
+        Move.mainXY[0] = hyConfig.getMainx();
+        Move.mainXY[1] = hyConfig.getMainy();
+        Move.cakeXY[0] = hyConfig.getCakex();
+        Move.cakeXY[1] = hyConfig.getCakey();
+        Move.armorXY[0] = hyConfig.getArmorx();
+        Move.armorXY[1] = hyConfig.getArmory();
+        Move.commsXY[0] = hyConfig.getCommsx();
+        Move.commsXY[1] = hyConfig.getCommsy();
+        Scale.mainScale = Double.parseDouble(hyConfig.getScale());
+        Scale.sizerScale = Double.parseDouble(hyConfig.getSizescale());
 
+        MinecraftForge.EVENT_BUS.register(newScheduler);
 
-         MinecraftForge.EVENT_BUS.register(newScheduler);
+        keyBindings[0] = new KeyBinding("HYK Config", Keyboard.KEY_P, NAME);
+        keyBindings[1] = new KeyBinding("Delete near entities", Keyboard.KEY_K, NAME);
+        keyBindings[2] = new KeyBinding("Display stats", Keyboard.KEY_J, NAME);
+        keyBindings[3] = new KeyBinding("Hyk", Keyboard.KEY_H, NAME);
 
-         keyBindings[0] = new KeyBinding("HYK Config", Keyboard.KEY_P, NAME);
-         keyBindings[1] = new KeyBinding("Delete near entities", Keyboard.KEY_K, NAME);
-         keyBindings[2] = new KeyBinding("Display stats", Keyboard.KEY_J, NAME);
-         keyBindings[3] = new KeyBinding("Hyk", Keyboard.KEY_H, NAME);
-
-         for (KeyBinding keyBinding : keyBindings) {
-             ClientRegistry.registerKeyBinding(keyBinding);
-         }
+        for (KeyBinding keyBinding : keyBindings) {
+            ClientRegistry.registerKeyBinding(keyBinding);
+        }
 
     }
 
@@ -168,14 +165,14 @@ public class HypixelKentik
     public void onRenderTick(TickEvent.RenderTickEvent event) {
         if (guiToOpen != null) {
             Minecraft mc = Minecraft.getMinecraft();
-            if(guiToOpen.equalsIgnoreCase("editlocations")) {
+            if (guiToOpen.equalsIgnoreCase("editlocations")) {
                 mc.displayGuiScreen(new EditLocationsGui());
             }
-            if(guiToOpen.startsWith("hykgui")) {
+            if (guiToOpen.startsWith("hykgui")) {
                 int page = Character.getNumericValue(guiToOpen.charAt(guiToOpen.length() - 1));
-                String selection = guiToOpen.replaceAll("hykgui","");
-                selection = selection.replaceAll("[0-9]","");
-                mc.displayGuiScreen(new HykGui(page,selection));
+                String selection = guiToOpen.replaceAll("hykgui", "");
+                selection = selection.replaceAll("[0-9]", "");
+                mc.displayGuiScreen(new HykGui(page, selection));
             }
             guiToOpen = null;
         }
@@ -183,46 +180,47 @@ public class HypixelKentik
 
     @SubscribeEvent
     public void renderPlayerInfo(final RenderGameOverlayEvent.Post event) {
-        if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE && event.type != RenderGameOverlayEvent.ElementType.JUMPBAR) return;
+        if (event.type != RenderGameOverlayEvent.ElementType.EXPERIENCE && event.type != RenderGameOverlayEvent.ElementType.JUMPBAR)
+            return;
         if (showTitle) {
-           utils.drawTitle(titleText);
+            utils.drawTitle(titleText);
         }
     }
 
     public static boolean isInteger(String s) {
-	    return isInteger(s, 10);
-	  }
+        return isInteger(s, 10);
+    }
 
-	public  static boolean isInteger(String s, int radix) {
-	    if (s.isEmpty()) {
-	      return false;
-	    }
-	    for (int i = 0; i < s.length(); i++) {
-	      if (i == 0 && s.charAt(i) == '-') {
-	        if (s.length() == 1) {
-	          return false;
-	        } else {
-	          continue;
-	        }
-	      }
-	      if (Character.digit(s.charAt(i), radix) < 0) {
-	        return false;
-	      }
-	    }
-	    return true;
+    public static boolean isInteger(String s, int radix) {
+        if (s.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < s.length(); i++) {
+            if (i == 0 && s.charAt(i) == '-') {
+                if (s.length() == 1) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            if (Character.digit(s.charAt(i), radix) < 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
     @SubscribeEvent
     public void onLogin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
 
-        if(hyConfig.getApikeyy().isEmpty()){
+        if (hyConfig.getApikeyy().isEmpty()) {
             new Thread(() -> {
 
                 try {
                     Thread.sleep(2000);
 
-                    utils.sendMessage(EnumChatFormatting.GREEN + "You ApiKey isn't set upped - use /hyk api" );
+                    utils.sendMessage(EnumChatFormatting.GREEN + "You ApiKey isn't set upped - use /hyk api");
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
