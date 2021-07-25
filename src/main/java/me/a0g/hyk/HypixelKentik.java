@@ -77,8 +77,6 @@ public class HypixelKentik
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
-        //ModCoreInstaller.initializeModCore(Minecraft.getMinecraft().mcDataDir);
-       // hyConfig = new HyConfig();
         hyConfig.preload();
 
 
