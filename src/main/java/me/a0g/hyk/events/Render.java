@@ -627,7 +627,6 @@ public class Render {
 					Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0);
 				}
 				HyK.ismuted = !HyK.ismuted;
-				//FMLLog.info("Y");
 			}
 		}
 	}
