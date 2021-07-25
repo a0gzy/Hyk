@@ -234,15 +234,6 @@ public class HypixelKentik {
                 FMLClientHandler.instance().getClient().getCurrentServerData().serverName.equalsIgnoreCase("HYPIXEL"));*/
     }
 
-    /*@SubscribeEvent
-    public void onPlayerLogOutEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        onHypixel = false;
-    }*/
-
-
-//    public void setOnHypixel(boolean onHypixel) {
-//        this.onHypixel = onHypixel;
-//    }
 
 }
 
