@@ -63,7 +63,7 @@ public class NameT {
                     if(main.getUtils().checkForDungeons()) {
                         if(event.entity instanceof EntityArmorStand) {
                             EntityArmorStand e = (EntityArmorStand) event.entity;
-                            if (e.getDisplayName().getUnformattedText().contains("✯")) {
+                            if (e.getDisplayName().getUnformattedText().contains("✯") || e.getDisplayName().getUnformattedText().contains("Shadow Assassin")) {
                                 renderLivingTag(e, event.x, event.y, event.z, e.getDisplayName().getUnformattedText());
                             }
                         }
@@ -315,14 +315,9 @@ public class NameT {
         String displayTag = unformattedText;
 
         double distance = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
-        //final float f2 =  ((float)distance * 0.1f + (float)(main.getHyConfig().getNamescale()/10.0f)) * 0.0266f;
 
         final FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        String h = EnumChatFormatting.GREEN.toString();
-        String health = "";
-
-        String ld = EnumChatFormatting.RESET.toString();
 
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)x + 0.0f, (float)y + entity.height + 0.9f, (float)z);
@@ -339,7 +334,8 @@ public class NameT {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-        String torender = displayTag + h + " " + health + ld;
+        String torender = displayTag + " §c" + distance + "m";
+
         final int i = fontrenderer.getStringWidth(torender) / 2;
         if(main.getHyConfig().isNameback()) {
             final Tessellator tessellator = Tessellator.getInstance();
