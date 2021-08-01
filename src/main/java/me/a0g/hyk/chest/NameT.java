@@ -61,11 +61,15 @@ public class NameT {
             if(Minecraft.getMinecraft().theWorld != null) {
                 if(event.entity != null){
                     if(main.getUtils().checkForDungeons()) {
+                        // e.getDisplayName().getUnformattedText().contains("Shadow Assassin")
                         if(event.entity instanceof EntityArmorStand) {
                             EntityArmorStand e = (EntityArmorStand) event.entity;
-                            if (e.getDisplayName().getUnformattedText().contains("✯") || e.getDisplayName().getUnformattedText().contains("Shadow Assassin")) {
+                            if (e.getDisplayName().getUnformattedText().contains("✯")) {
                                 renderLivingTag(e, event.x, event.y, event.z, e.getDisplayName().getUnformattedText());
                             }
+                        }
+                        if(event.entity.getDisplayName().getUnformattedText().contains("Shadow Assassin")){
+                            renderLivingTag(event.entity, event.x, event.y, event.z, event.entity.getDisplayName().getUnformattedText());
                         }
                     }
                 }
@@ -101,31 +105,7 @@ public class NameT {
     }
 
 
-
-    public static boolean renderFromTeam(EntityPlayer player) {
-        Team team = player.getTeam();
-        Team team1 = Minecraft.getMinecraft().thePlayer.getTeam();
-
-        if (team != null) {
-            Team.EnumVisible enumVisible = team.getNameTagVisibility();
-            switch (enumVisible) {
-                case ALWAYS:
-                    return true;
-                case NEVER:
-                    return false;
-                case HIDE_FOR_OTHER_TEAMS:
-                    return team1 == null || team.isSameTeam(team1);
-                case HIDE_FOR_OWN_TEAM:
-                    return team1 == null || !team.isSameTeam(team1);
-                default:
-                    return true;
-            }
-        }
-        else {
-            return false;
-        }
-    }
-
+    // Damage look
     @SubscribeEvent
     public void onRender(final RenderLivingEvent.Specials.Pre event){
 
@@ -314,7 +294,8 @@ public class NameT {
     private void renderLivingTag(final EntityLivingBase entity, final double x, final double y, final double z, String unformattedText) {
         String displayTag = unformattedText;
 
-        double distance = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
+        int distance = (int) Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
+
 
         final FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
 
@@ -334,7 +315,7 @@ public class NameT {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-        String torender = displayTag + " §c" + distance + "m";
+        String torender = displayTag + EnumChatFormatting.RED + distance + "m" ;
 
         final int i = fontrenderer.getStringWidth(torender) / 2;
         if(main.getHyConfig().isNameback()) {
@@ -358,6 +339,31 @@ public class NameT {
         GlStateManager.disableBlend();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.popMatrix();
+    }
+
+
+    public static boolean renderFromTeam(EntityPlayer player) {
+        Team team = player.getTeam();
+        Team team1 = Minecraft.getMinecraft().thePlayer.getTeam();
+
+        if (team != null) {
+            Team.EnumVisible enumVisible = team.getNameTagVisibility();
+            switch (enumVisible) {
+                case ALWAYS:
+                    return true;
+                case NEVER:
+                    return false;
+                case HIDE_FOR_OTHER_TEAMS:
+                    return team1 == null || team.isSameTeam(team1);
+                case HIDE_FOR_OWN_TEAM:
+                    return team1 == null || !team.isSameTeam(team1);
+                default:
+                    return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
 
 }

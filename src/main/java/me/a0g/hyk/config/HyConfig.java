@@ -397,7 +397,8 @@ public class HyConfig extends Vigilant {
             type = PropertyType.TEXT,
             name = "Api key",
             description = "ApiKey for stats parsing.",
-            category = "Strings"
+            category = "Strings",
+            protectedText = true
     )
     private String apikeyy = "";
 
