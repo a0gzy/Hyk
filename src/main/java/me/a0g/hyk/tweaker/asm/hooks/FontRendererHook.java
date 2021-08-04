@@ -21,48 +21,47 @@ public class FontRendererHook {
 
     public static String changeTextColor(String text) {
 
-        if (text.matches("(.+)?.(MVP§.+) (§.)?a0g(.+)?") && a0g) {  //   §b[MVP§0+§b] a0g joined
-            text = text.replaceAll(".(MVP§.+§.). a0g", "§c[§f§ks§6§lGOD§f§ks§c] a0g");
-        }
-        if (text.contains("a0g") && a0g) {
-            String spl = "r";
-            if (text.matches("(.+)?§.§.a0g(.+)?")) {
-                String[] splited = text.split("a0g");
-                if (!splited[0].isEmpty()) {
-                    spl = splited[0].charAt(splited[0].length() - 1) + "";
-                    String spl2 = "" + splited[0].charAt(splited[0].length() - 3);
-                    if( spl.matches("[klmnor]")){
-                        spl = "r";
-                    }
-                    spl = spl2 + "§" + spl;
-                }
+        try {
+
+            if (text.matches("(.+)?.(MVP§.+) (§.)?a0g(.+)?") && a0g) {  //   §b[MVP§0+§b] a0g joined
+                text = text.replaceAll(".(MVP§.+§.). a0g", "§c[§f§ks§6§lGOD§f§ks§c] a0g");
             }
-            else if (text.matches("(.+)?§.a0g(.+)?")) {
-                String[] splited = text.split("a0g");
-                if (!splited[0].isEmpty()) {
-                    spl = splited[0].charAt(splited[0].length() - 1) + "";
-                    if( spl.matches("[klmnor]")){
-                        spl = "r";
+            if (text.contains("a0g") && a0g) {
+                String spl = "r";
+                if (text.matches("(.+)?§.§.a0g(.+)?")) {
+                    String[] splited = text.split("a0g");
+                    if (!splited[0].isEmpty()) {
+                        spl = splited[0].charAt(splited[0].length() - 1) + "";
+                        String spl2 = "" + splited[0].charAt(splited[0].length() - 3);
+                        if (spl.matches("[klmnor]")) {
+                            spl = "r";
+                        }
+                        spl = spl2 + "§" + spl;
+                    }
+                } else if (text.matches("(.+)?§.a0g(.+)?")) {
+                    String[] splited = text.split("a0g");
+                    if (!splited[0].isEmpty()) {
+                        spl = splited[0].charAt(splited[0].length() - 1) + "";
+                        if (spl.matches("[klmnor]")) {
+                            spl = "r";
+                        }
                     }
                 }
+                text = text.replaceAll("a0g", "§3§oa0g§" + spl);
             }
-            text = text.replaceAll("a0g", "§3§oa0g§" + spl);
-        }
-        if(text.contains("Danreal") && main.getHyConfig().isDaynreal()){
-            text = text.replaceAll("Danreal", "");
-        }
+            if (text.contains("Danreal") && main.getHyConfig().isDaynreal()) {
+                text = text.replaceAll("Danreal", "");
+            }
         /*if (text.matches("(.+)?.(VIP.) (§.)?TechDavo(.+)?")) {  //   §b[MVP§0+§b] a0g joined
             text = text.replaceAll(".(VIP). TechDavo", "§e[§pGAY§e] §aDavo§c♥");
         }
         if(text.contains("TechDavo")){
             text = text.replaceAll("TechDavo", "Davo§c♥");
         }*/
-        if(text.contains("LO1D")){
-            text = text.replaceAll("LO1D", "Լոիդ");
-        }
 
-      //  if (main.getHyConfig().isTransform()) {
-            if (main.getHyConfig().isNamechanger() && Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().theWorld != null) {
+
+            //  if (main.getHyConfig().isTransform()) {
+            if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().thePlayer != null && Minecraft.getMinecraft().theWorld != null && main.getHyConfig().isNamechanger()) {
                 String cn = main.getHyConfig().getCustomname();
                 if (!cn.isEmpty()) {
                     String mcname = Minecraft.getMinecraft().thePlayer.getName();
@@ -81,8 +80,8 @@ public class FontRendererHook {
                         String[] splited = fname.split(mcname);
                         if (!splited[0].isEmpty()) {
                             spl = splited[0].charAt(splited[0].length() - 1) + "";
-                            if(splited[0].length() > 4){
-                                if(splited[0].charAt(splited[0].length() - 4) == '§' ){
+                            if (splited[0].length() > 4) {
+                                if (splited[0].charAt(splited[0].length() - 4) == '§') {
                                     spl = splited[0].charAt(splited[0].length() - 3) + "§" + spl;
                                 }
                             }
@@ -95,8 +94,15 @@ public class FontRendererHook {
                     return fname;
                 }
             }
-       // }
 
+            if (text.contains("LO1D")) {
+                text = text.replaceAll("LO1D", "Լոիդ");
+            }
+            // }
+
+        }catch (Exception e) {
+            // logger.warn("Failed to connect to Discord RPC: " + e.getMessage());
+        }
         return text;
     }
 

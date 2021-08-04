@@ -294,7 +294,11 @@ public class NameT {
     private void renderLivingTag(final EntityLivingBase entity, final double x, final double y, final double z, String unformattedText) {
         String displayTag = unformattedText;
 
-        int distance = (int) Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
+        String distance = "";
+
+        if(main.getHyConfig().isDungeonstareddistance()) {
+            distance = (int) Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity) + "m";
+        }
 
 
         final FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
@@ -315,7 +319,7 @@ public class NameT {
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-        String torender = displayTag + EnumChatFormatting.RED + distance + "m" ;
+        String torender = displayTag + EnumChatFormatting.RED + distance;
 
         final int i = fontrenderer.getStringWidth(torender) / 2;
         if(main.getHyConfig().isNameback()) {

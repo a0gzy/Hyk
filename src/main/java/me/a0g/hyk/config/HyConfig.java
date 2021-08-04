@@ -193,6 +193,15 @@ public class HyConfig extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
+            name = "Dungeon stared distance",
+            category = "SkyBlock",
+            subcategory = "SkyBlock",
+            description = "Show distance to mobs."
+    )
+    private boolean dungeonstareddistance = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
             name = "Commissions display",
             category = "SkyBlock",
             subcategory = "SkyBlock",
@@ -280,7 +289,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "Toggle HitFix."
     )
-    private boolean hitfix = false;
+    private boolean hitfix = true;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -314,7 +323,7 @@ public class HyConfig extends Vigilant {
             name = "Presents",
             category = "Private",
             subcategory = "General",
-            description = "Toggle Presents Sp."
+            description = "Toggle Presents Sp. Shift + K to delete founded"
     )
     private boolean presentssp = false;
 

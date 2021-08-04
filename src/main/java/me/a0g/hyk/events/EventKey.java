@@ -2,6 +2,7 @@ package me.a0g.hyk.events;
 
 import gg.essential.api.utils.GuiUtil;
 import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.chest.Presents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,6 +12,8 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemSkull;
+import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -106,6 +109,34 @@ public class EventKey {
 
         /// K
         if (keyBindings[1].isPressed()) {
+
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                if (main.getUtils().checkScoreboardString("Jerry's")) {
+                    for(Object o: Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                        if (o instanceof EntityArmorStand) {
+                            if (main.getUtils().checkForSkyblock()) {
+                                if (((EntityArmorStand) o).getEquipmentInSlot(4) != null) {
+                                    if (((EntityArmorStand) o).getEquipmentInSlot(4).getItem() instanceof ItemSkull) {
+
+                                        String message34 = "";
+                                        if (((EntityArmorStand) o).getEquipmentInSlot(4).hasTagCompound()) {
+                                            message34 = ((EntityArmorStand) o).getEquipmentInSlot(4).getTagCompound().getCompoundTag("SkullOwner").getTag("Id") + "";
+                                        }
+                                        if (message34.contains("7732c5e4-1800-3b90-a70f-727d2969254b")) {
+
+                                            if(Minecraft.getMinecraft().thePlayer.getDistanceToEntity( ((EntityArmorStand) o)  ) < 3) {
+                                                Minecraft.getMinecraft().theWorld.removeEntity((EntityArmorStand) o);
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return;
+            }
 
             if (main.getUtils().checkScoreboardString("Void Sepulture")) {
 

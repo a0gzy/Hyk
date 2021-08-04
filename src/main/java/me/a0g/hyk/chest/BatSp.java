@@ -15,7 +15,7 @@ public class BatSp {
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event){
-        if(main.getHyConfig().isBatsp()){
+        if(main.getHyConfig().isBatsp() || main.getUtils().checkForDungeons()){
             for(Object e: Minecraft.getMinecraft().theWorld.loadedEntityList){
                 if(e instanceof EntityBat) {
 

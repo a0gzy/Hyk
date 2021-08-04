@@ -32,15 +32,16 @@ public class MinecraftTransformer implements ITransformer {
             // check qualifying names (mcp, srg)
             if (methodName.equals("clickMouse") || methodName.equals("func_147116_af")) {
                 // insert an instruction list before final return
-                method.instructions.insertBefore(method.instructions.getLast().getPrevious(), sayBruh2());
-                // stop looping through methods as we've found the one we need
-            }
-            if (methodName.equals("startGame") || methodName.equals("func_71384_a")) {
-                // insert an instruction list before final return
-                method.instructions.insertBefore(method.instructions.getLast().getPrevious(), sayBruh());
+                method.instructions.insertBefore(method.instructions.getFirst(), sayBruh2());
                 // stop looping through methods as we've found the one we need
                 break;
             }
+           /* if (methodName.equals("startGame") || methodName.equals("func_71384_a")) {
+                // insert an instruction list before final return
+                method.instructions.insertBefore(method.instructions.getLast().getPrevious(), sayBruh());
+                // stop looping through methods as we've found the one we need
+               // break;
+            }*/
 
         }
     }
@@ -66,7 +67,7 @@ public class MinecraftTransformer implements ITransformer {
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, //
                 "me/a0g/hyk/tweaker/asm/hooks/MinecraftHook",
                 "hitfix",
-                "()V",  // return text
+                "()V",
                 false));
 
         return list;
