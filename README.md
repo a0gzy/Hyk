@@ -25,7 +25,7 @@ Minecraft Mod
 5. Include your **Minecraft** username and password as arguments in the **debug configuration**.
    In order, to login into [Hypixel](https://hypixel.net) by your account.
     ```text
-    --username "<username>" --password "<password>"
+    --username=<username> --password=<password>
     ```
    > **Note:** Don't share your password with **anyone**.
    > **We aren't going to ask you about your password!**
