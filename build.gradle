@@ -4,7 +4,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "6f53277"
 }
 
-version = "3.0.0"
+version = "3.0.1"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
@@ -103,7 +103,7 @@ classes.dependsOn moveResources
 
 jar {
     dependsOn configurations.compile
-    archiveFileName = "hyk-3.0.0.jar"
+    archiveFileName = "hyk-${project.version}.jar"
     from({
         configurations.compile.collect {
             it.isDirectory() ? it : zipTree(it)
