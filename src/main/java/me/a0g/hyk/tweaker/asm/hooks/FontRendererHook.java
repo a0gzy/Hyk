@@ -49,9 +49,6 @@ public class FontRendererHook {
                 }
                 text = text.replaceAll("a0g", "§3§oa0g§" + spl);
             }
-            if (text.contains("Danreal") && main.getHyConfig().isDaynreal()) {
-                text = text.replaceAll("Danreal", "");
-            }
         /*if (text.matches("(.+)?.(VIP.) (§.)?TechDavo(.+)?")) {  //   §b[MVP§0+§b] a0g joined
             text = text.replaceAll(".(VIP). TechDavo", "§e[§pGAY§e] §aDavo§c♥");
         }
@@ -91,7 +88,9 @@ public class FontRendererHook {
                         fname = fname.replaceAll(mcname, cn.replaceAll("&", "§") + "§" + spl);
                     }
 
-                    return fname;
+                    text = fname;
+
+                    //return fname;
                 }
             }
 

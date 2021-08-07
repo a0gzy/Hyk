@@ -5,7 +5,6 @@ import com.google.common.collect.Multimap;
 import jline.internal.Log;
 import me.a0g.hyk.HypixelKentik;
 
-import me.a0g.hyk.commands.Scale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;

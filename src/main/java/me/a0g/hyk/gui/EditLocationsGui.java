@@ -1,20 +1,26 @@
 package me.a0g.hyk.gui;
 
+import lombok.SneakyThrows;
 import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.commands.Move;
-import me.a0g.hyk.commands.Scale;
-import me.a0g.hyk.events.Render;
-import net.minecraft.client.gui.Gui;
+import me.a0g.hyk.config.HykPos;
+import me.a0g.hyk.core.Feature;
+import me.a0g.hyk.gui.buttons.ButtonLocation;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.input.Mouse;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class EditLocationsGui extends GuiScreen {
 
     private final HypixelKentik main = HypixelKentik.getInstance();
+
+    private final Map<Feature, ButtonLocation> buttonLocations = new EnumMap<>(Feature.class);
 
     private String moving = null;
     private int lastMouseX = -1;
@@ -24,6 +30,7 @@ public class EditLocationsGui extends GuiScreen {
     private LocationButton cake;
     private LocationButton armor;
     private LocationButton comms;
+    private Feature dragging;
 
     @Override
     public boolean doesGuiPauseGame() {
@@ -34,35 +41,16 @@ public class EditLocationsGui extends GuiScreen {
     public void initGui() {
         super.initGui();
 
-        String displayText = EnumChatFormatting.DARK_RED + "12:00 " +
-                EnumChatFormatting.AQUA + "FPS " +
-                EnumChatFormatting.RESET + "Sprint " +
-                EnumChatFormatting.RESET + "CPS: 99 \n" +
-                EnumChatFormatting.RED + "Psp " +
-                EnumChatFormatting.BLUE + "Chest " +
-                EnumChatFormatting.GREEN + "NameT " +
-                EnumChatFormatting.LIGHT_PURPLE + "Fairy";
+        for (Feature feature : Feature.getGuiFeatures()){
+            ButtonLocation buttonLocation = new ButtonLocation(feature);
+            this.buttonList.add(buttonLocation);
+            buttonLocations.put(feature, buttonLocation);
+        }
 
-        String caket = EnumChatFormatting.GOLD + "1d5h";
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
-        String armort = "    \n    \n    \n    \n    \n    \n    \n";
+        this.buttonList.add(new LocationButton(0,sr.getScaledWidth()/2-25,sr.getScaledHeight()/2-10,1,"Reset config"));
 
-        String commst = EnumChatFormatting.BLUE + "Commissions\n" +
-                EnumChatFormatting.RESET + "Mithrill miner " + EnumChatFormatting.DARK_GREEN + "80%\n" +
-                EnumChatFormatting.RESET + "Titanium miner " + EnumChatFormatting.DARK_GREEN + "80%\n" +
-                EnumChatFormatting.RESET + "Titanium miner " + EnumChatFormatting.DARK_GREEN + "80%\n" +
-                EnumChatFormatting.RESET + "Titanium miner " + EnumChatFormatting.DARK_GREEN + "80%\n" +
-                "\n" + EnumChatFormatting.RESET + "Mithrill powder " + EnumChatFormatting.DARK_GREEN + "10,425";
-
-        display = new LocationButton(0, Move.mainXY[0], Move.mainXY[1], 135 * Scale.mainScale, 20 * Scale.mainScale, Scale.mainScale, displayText, null, null);
-        cake = new LocationButton(0, Move.cakeXY[0] + 18, Move.cakeXY[1] + 3, 100 * Scale.mainScale, 20 * Scale.mainScale, Scale.mainScale, caket, null, null);
-        armor = new LocationButton(0, Move.armorXY[0], Move.armorXY[1], 20 * Scale.mainScale, 64 * Scale.mainScale, Scale.mainScale, armort, null, null);
-        comms = new LocationButton(0, Move.commsXY[0], Move.commsXY[1], 110 * Scale.mainScale, 70 * Scale.mainScale, Scale.mainScale, commst, null, null);
-
-        this.buttonList.add(display);
-        this.buttonList.add(cake);
-        this.buttonList.add(armor);
-        this.buttonList.add(comms);
     }
 
     @Override
@@ -70,7 +58,7 @@ public class EditLocationsGui extends GuiScreen {
         this.drawDefaultBackground();
         mouseMoved(mouseX, mouseY);
 
-        double scale = Scale.mainScale;
+        /*double scale = Scale.mainScale;
         double scaleReset = Math.pow(scale, -1);
         GL11.glScaled(scale, scale, scale);
         mc.getTextureManager().bindTexture(Render.CAKE_ICON);
@@ -82,7 +70,12 @@ public class EditLocationsGui extends GuiScreen {
             main.getUtils().renderArmor(armorr, Move.armorXY[0], Move.armorXY[1] + offset, -100);
         }
 
-        GL11.glScaled(scaleReset, scaleReset, scaleReset);
+        GL11.glScaled(scaleReset, scaleReset, scaleReset);*/
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+        this.drawCenteredString(mc.fontRendererObj, "Use Mouse wheel to rescale", sr.getScaledWidth()/2, sr.getScaledHeight()/2, Color.CYAN.getRGB());
+        this.drawCenteredString(mc.fontRendererObj, "Click and drag to edit location", sr.getScaledWidth()/2, sr.getScaledHeight()/2 + 10, Color.CYAN.getRGB());
+
+
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -91,7 +84,20 @@ public class EditLocationsGui extends GuiScreen {
         int xMoved = mouseX - lastMouseX;
         int yMoved = mouseY - lastMouseY;
 
-        if (moving != null) {
+
+        if(dragging != null){
+            ButtonLocation buttonLocation = buttonLocations.get(dragging);
+            dragging.getPosTweak().x += + xMoved;
+            dragging.getPosTweak().y += + yMoved;
+           // dragging.setX(dragging.getX() + xMoved);
+          //  dragging.setY(dragging.getY() + yMoved);
+            buttonLocation.drawButton(mc, mouseX, mouseY);
+        }
+      //  this.buttonList.clear();
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+
+        /*if (moving != null) {
             switch (moving) {
                 case "display":
                     Move.mainXY[0] += xMoved;
@@ -123,13 +129,16 @@ public class EditLocationsGui extends GuiScreen {
         }
 
         lastMouseX = mouseX;
-        lastMouseY = mouseY;
+        lastMouseY = mouseY;*/
     }
 
     @Override
     public void actionPerformed(GuiButton button) {
-        if (button instanceof LocationButton) {
-            if (button == display) {
+        if (button instanceof ButtonLocation) {
+            ButtonLocation buttonLocation = (ButtonLocation) button;
+            dragging = buttonLocation.getFeature();
+
+            /*if (button == display) {
                 moving = "display";
             }
             if (button == cake) {
@@ -140,6 +149,26 @@ public class EditLocationsGui extends GuiScreen {
             }
             if (button == comms) {
                 moving = "comms";
+            }*/
+        }else if(button instanceof LocationButton){
+            main.setHykPos(new HykPos());
+            main.getHykPos().save();
+
+            Feature.setFromConfig();
+           /* for(Feature feature : Feature.getGuiFeatures()){
+                feature.
+            }*/
+
+        }
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        for(Feature feature : Feature.getGuiFeatures()){
+            ButtonLocation buttonLocation = buttonLocations.get(feature);
+            if(buttonLocation.isHovered){
+                buttonLocation.getFeature().getPosTweak().scale = (buttonLocation.getFeature().getPosTweak().scale + Mouse.getEventDWheel() / 1000f);
             }
         }
     }
@@ -147,7 +176,8 @@ public class EditLocationsGui extends GuiScreen {
     @Override
     public void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        moving = null;
+        dragging = null;
+        /*moving = null;
         main.getHyConfig().setMainx( Move.mainXY[0] );
         main.getHyConfig().setMainy( Move.mainXY[1] );
 
@@ -158,10 +188,33 @@ public class EditLocationsGui extends GuiScreen {
         main.getHyConfig().setArmory( Move.armorXY[1] );
 
         main.getHyConfig().setCommsx( Move.commsXY[0] );
-        main.getHyConfig().setCommsy( Move.commsXY[1] );
+        main.getHyConfig().setCommsy( Move.commsXY[1] );*/
+
+        main.getHykPos().sprint = Feature.SPRINT.getPosTweak();
+        main.getHykPos().time = Feature.TIME.getPosTweak();
+        main.getHykPos().cps = Feature.CPS.getPosTweak();
+        main.getHykPos().fps = Feature.FPS.getPosTweak();
+        main.getHykPos().armorhud = Feature.ARMORHUD.getPosTweak();
+        main.getHykPos().commissions = Feature.COMMISSIONS.getPosTweak();
+    }
+
+
+    @SneakyThrows
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
 
         main.getHyConfig().markDirty();
         main.getHyConfig().writeData();
+
+        main.getHykPos().save();
+
+        //Minecraft.getMinecraft().displayGuiScreen();
+
+
+        // GuiUtil.open(Objects.requireNonNull(Minecraft.getMinecraft().ingameGUI);
+
+
     }
 
 }

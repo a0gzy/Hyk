@@ -28,14 +28,46 @@ public class HyConfig extends Vigilant {
         GuiUtil.open(Objects.requireNonNull(new EditLocationsGui()));
     }
 
+
+
+
     @Property(
             type = PropertyType.SWITCH,
             name = "AutoSprint",
             category = "General",
-            subcategory = "General",
+            subcategory = "Sprint",
             description = "Toggle AutoSprint."
     )
     private boolean autoSprintEnabled = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "AutoSprint Display",
+            category = "General",
+            subcategory = "Sprint",
+            description = "Display AutoSprint."
+    )
+    private boolean autoSprintDisplay = true;
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "AutoSprint Text",
+            category = "General",
+            subcategory = "Sprint",
+            description = "AutoSprint text.",
+            placeholder = "Sprint"
+    )
+    private String autoSprintText = "Sprint";
+
+    @Property(
+            type = PropertyType.COLOR,
+            name = "AutoSprint Color",
+            category = "General",
+            subcategory = "Sprint",
+            description = "AutoSprint display color."
+    )
+    private Color autoSprintColor = Color.WHITE;
+
 
     @Property(
             type = PropertyType.SWITCH,
@@ -47,23 +79,26 @@ public class HyConfig extends Vigilant {
     private boolean timed = true;
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "DANreal",
+            type = PropertyType.COLOR,
+            name = "Time Color",
             category = "General",
             subcategory = "General",
-            description = "Danreal mute."
+            description = "Time display color."
     )
-    private boolean daynreal = false;
+    private Color timeColor = Color.WHITE;
+
 
 
     @Property(
             type = PropertyType.SWITCH,
             name = "Mute button",
             category = "General",
-            subcategory = "General",
+            subcategory = "zElse",
             description = "Button in inventory for game muting."
     )
     private boolean gamemute = false;
+
+
 
     @Property(
             type = PropertyType.PERCENT_SLIDER,
@@ -73,7 +108,7 @@ public class HyConfig extends Vigilant {
             description = "Button in inventory for game muting.",
             hidden = true
     )
-    private float gamemutefloat = 0;
+    private float gamemutefloat = 0.03f;
 
 
 
@@ -87,6 +122,8 @@ public class HyConfig extends Vigilant {
     )
     private boolean armorh = true;
 
+
+
     @Property(
             type = PropertyType.SWITCH,
             name = "FPS",
@@ -95,6 +132,17 @@ public class HyConfig extends Vigilant {
             description = "FPS display."
     )
     private boolean fpsd = true;
+
+    @Property(
+            type = PropertyType.COLOR,
+            name = "FPS Color",
+            category = "General",
+            subcategory = "General",
+            description = "FPS display color."
+    )
+    private Color fpsColor = Color.WHITE;
+
+
 
     @Property(
             type = PropertyType.SWITCH,
@@ -106,13 +154,15 @@ public class HyConfig extends Vigilant {
     private boolean cpsd = true;
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "Background",
+            type = PropertyType.COLOR,
+            name = "CPS Color",
             category = "General",
             subcategory = "General",
-            description = "Background display."
+            description = "CPS display color."
     )
-    private boolean backgroung = false;
+    private Color cpsColor = Color.WHITE;
+
+
 
     @Property(
             type = PropertyType.SWITCH,
@@ -123,11 +173,12 @@ public class HyConfig extends Vigilant {
     )
     private boolean namechanger = false;
 
+
     @Property(
             type = PropertyType.SWITCH,
             name = "SWHook",
             category = "General",
-            subcategory = "Hook",
+            subcategory = "zElse",
             description = "Sw game stats."
     )
     private boolean swhook = false;
@@ -136,10 +187,11 @@ public class HyConfig extends Vigilant {
             type = PropertyType.SWITCH,
             name = "BankHook",
             category = "General",
-            subcategory = "Hook",
+            subcategory = "zElse",
             description = "Bank with/dep coins."
     )
     private boolean bankhook = false;
+
 
     @Property(
             type = PropertyType.SWITCH,
@@ -183,6 +235,16 @@ public class HyConfig extends Vigilant {
     private boolean cakedisplay = true;
 
     @Property(
+            type = PropertyType.COLOR,
+            name = "Cakes Color",
+            category = "SkyBlock",
+            subcategory = "SkyBlock",
+            description = "Cakes display Color."
+    )
+    private Color cakedisplayColor = Color.WHITE;
+
+
+    @Property(
             type = PropertyType.SWITCH,
             name = "Dungeon stared",
             category = "SkyBlock",
@@ -200,14 +262,27 @@ public class HyConfig extends Vigilant {
     )
     private boolean dungeonstareddistance = true;
 
+
+
     @Property(
             type = PropertyType.SWITCH,
-            name = "Commissions display",
+            name = "Commissions Display",
             category = "SkyBlock",
             subcategory = "SkyBlock",
             description = "Display active Commissions."
     )
     private @Getter boolean commsdispl = true;
+
+    @Property(
+            type = PropertyType.COLOR,
+            name = "Commissions Color",
+            category = "SkyBlock",
+            subcategory = "SkyBlock",
+            description = "Commissions Display Color."
+    )
+    private Color commsdisplColor = Color.WHITE;
+
+
 
     @Property(
             type = PropertyType.SWITCH,
@@ -223,7 +298,8 @@ public class HyConfig extends Vigilant {
             name = "Diana",
             category = "SkyBlock",
             subcategory = "SkyBlock",
-            description = "Burrows waypoints."
+            description = "Burrows waypoints.",
+            hidden = true
     )
     private boolean Diana = false;
 
@@ -424,96 +500,6 @@ public class HyConfig extends Vigilant {
 
 
     //config hidden
-
-    @Property(
-            type = PropertyType.TEXT,
-            name = "sizescake",
-            description = "Need",
-            category = "z",
-            hidden = true
-    )
-    private String sizescale = "0.25";
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "coordsx",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int mainx = 2;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "coordsy",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int mainy = 2;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "cakex",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int cakex = 22;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "cakey",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int cakey = 7;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "armorx",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int armorx = 1;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "armory",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int armory = 50;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "commsx",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int commsx = 22;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "commsy",
-            description = "Need",
-            category = "z",
-            max = 1920,
-            hidden = true
-    )
-    private int commsy = 45;
-
     @Property(
             type = PropertyType.TEXT,
             name = "Cakes",
@@ -523,28 +509,12 @@ public class HyConfig extends Vigilant {
     )
     private String cakepicked = "";
 
-    @Property(
-            type = PropertyType.TEXT,
-            name = "Scale",
-            description = "Needed.",
-            category = "z",
-            hidden = true
-    )
-    private String scale = "1.0";
-
-    @Property(
-            type = PropertyType.COLOR,
-            name = "TestColor",
-            description = "color",
-            category = "z",
-            hidden = true
-    )
-    private Color testcolor = Color.white;
 
 
 
-    public HyConfig() {
-        super(new File("./config/hyk.toml"));
+
+    public HyConfig(File file) {
+        super(file);
         initialize();
 
         setCategoryDescription("Strings","Some text to be stored in config");

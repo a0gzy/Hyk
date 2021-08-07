@@ -5,19 +5,23 @@ import lombok.Getter;
 import lombok.Setter;
 import me.a0g.hyk.HypixelKentik;
 
+import me.a0g.hyk.events.Cakes;
 import me.a0g.hyk.events.Render;
 import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.handlers.ScoreboardHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiPlayerTabOverlay;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.item.ItemStack;
@@ -241,6 +245,57 @@ public class Utils {
         GlStateManager.disableRescaleNormal();
 
         GlStateManager.popMatrix();
+    }
+
+    public String getCommissions(Minecraft mc){
+        if(!main.getUtils().checkForSkyblock()) return "";
+
+        NetHandlerPlayClient netHandler = mc.thePlayer.sendQueue;
+        List<NetworkPlayerInfo> fullList = GuiPlayerTabOverlay.field_175252_a.sortedCopy(netHandler.getPlayerInfoMap());
+        GuiPlayerTabOverlay tabList = Minecraft.getMinecraft().ingameGUI.getTabList();
+
+        String allcomms = "";
+        String powder = "";
+        String comms = "";
+        String ability = "";
+
+        for (int entry = 0; entry < fullList.size(); entry ++) {
+
+            if (tabList.getPlayerName(fullList.get(entry)).contains("Commissions")) {
+
+                comms = TextUtils.stripColor(tabList.getPlayerName(fullList.get(entry)));
+
+                for (int i = 1; i < 5; i++) {
+                    String torender = tabList.getPlayerName(fullList.get(entry + i));
+                    if (torender.contains("%") || torender.contains("DONE")) {
+                        allcomms = allcomms + torender + "\n";
+                    }
+                }
+            } else if (tabList.getPlayerName(fullList.get(entry)).contains("Mithril Powder:")) {
+                powder = tabList.getPlayerName(fullList.get(entry));
+
+                // Ability KD
+                final EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
+                if (pl.getHeldItem() != null) {
+                    if (Minecraft.getMinecraft().thePlayer.getHeldItem().getTagCompound().getCompoundTag("display").getTag("Lore") != null) {
+                        if (Minecraft.getMinecraft().thePlayer.getHeldItem().getTagCompound().getCompoundTag("display").getTag("Lore").toString().contains("Cooldown:")) {
+                            if (Cakes.newUse < System.currentTimeMillis() / 1000L) {
+                                ability = EnumChatFormatting.GREEN + "Ability: §cReady";
+                            } else
+                                ability = EnumChatFormatting.GREEN + "Ability: §c" + (int) (Cakes.newUse - System.currentTimeMillis() / 1000L) + "s";
+
+                        }
+                    }
+                }
+            }
+            else if(tabList.getPlayerName(fullList.get(entry)).contains("Gemstone Powder:")) {
+                powder = powder + "\n" + tabList.getPlayerName(fullList.get(entry));
+            }
+        }
+        allcomms = "§z§l" + comms + "\n" + allcomms + "\n" + powder + "\n" + ability;
+
+
+        return allcomms;
     }
 
     public void createTitle(String text, int seconds) {

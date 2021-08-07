@@ -4,7 +4,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "6f53277"
 }
 
-version = "2.0"
+version = "3.0.0"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
@@ -59,9 +59,9 @@ dependencies {
 
    // embed "gg.essential:loader-launchwrapper:1.0.2"
 
-    embed "gg.essential:loader-launchwrapper:1.0.2"
+    embed "gg.essential:loader-launchwrapper:1.1.0"
     //implementation "gg.essential:Essential:1221-10809-SNAPSHOT"
-    implementation "gg.essential:essential-1.8.9-forge:1234"
+    implementation "gg.essential:essential-1.8.9-forge:1282"
 
 
 }
@@ -103,7 +103,7 @@ classes.dependsOn moveResources
 
 jar {
     dependsOn configurations.compile
-    archiveFileName = "hyk-2.0.jar";
+    archiveFileName = "hyk-3.0.0.jar"
     from({
         configurations.compile.collect {
             it.isDirectory() ? it : zipTree(it)
@@ -139,45 +139,3 @@ jar {
 
 }
 
-// This adds support to ("embed", "shade", "include") libraries into our JAR
-/*
-shadowJar {
-    archiveFileName = jar.archiveFileName
-    archiveClassifier.set('')
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
-    exclude('lombok-1.18.20.jar')
-
-    dependencies {
-        exclude(dependency('gg.essential::'))
-        exclude(dependency('gg.essential.lib::'))
-        exclude(dependency('org.jetbrains.kotlin::'))
-        exclude(dependency('com.github.KevinPriv::'))
-        exclude(dependency('org.bitlet::'))
-        exclude(dependency('com.github.videogame-hacker::'))
-        exclude(dependency('org.kodein.di::'))
-        exclude(dependency('org.spongepowered::'))
-
-    }
-
-
-}*/
-
-/*task copyLicenses (type: Copy) {
-    from(project.projectDir) {
-        include('LICENSE')
-        include('NOTICE')
-        include('dependencyLicenses/**')
-    }
-    into(sourceSets.main.output.resourcesDir)
-}
-
-
-tasks.jar.dependsOn(tasks.copyLicenses)
-tasks.reobfJar.dependsOn(tasks.shadowJar)*/

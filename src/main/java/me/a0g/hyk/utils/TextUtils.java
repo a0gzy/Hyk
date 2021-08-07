@@ -1,5 +1,7 @@
 package me.a0g.hyk.utils;
 
+import net.minecraft.client.Minecraft;
+
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -176,5 +178,9 @@ public class TextUtils {
      */
     public static String stripResets(String input) {
         return RESET_CODE_PATTERN.matcher(input).replaceAll("");
+    }
+
+    public void drawText(float scale, Minecraft mc , int color){
+
     }
 }

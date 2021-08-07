@@ -1,18 +1,13 @@
 package me.a0g.hyk;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import gg.essential.api.EssentialAPI;
-import gg.essential.api.config.EssentialConfig;
-import gg.essential.loader.stage0.EssentialSetupTweaker;
 import lombok.Getter;
 import lombok.Setter;
 import me.a0g.hyk.chest.*;
 import me.a0g.hyk.config.HyConfig;
+import me.a0g.hyk.config.HykPos;
 import me.a0g.hyk.events.*;
 import me.a0g.hyk.commands.*;
 import me.a0g.hyk.gui.EditLocationsGui;
-import me.a0g.hyk.gui.HykGui;
 import me.a0g.hyk.mytests.BankHook;
 import me.a0g.hyk.mytests.DiscordRPCManager;
 import me.a0g.hyk.mytests.SwHook;
@@ -25,32 +20,31 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
 
 @Getter
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "2.0";
+    public static final String VERSION = "2.0.0";
     public static final String NAME = "HyK";
 
-    private final HyConfig hyConfig = new HyConfig();
+   // private final HyConfig hyConfig = new HyConfig();
+    private HyConfig hyConfig;
+
+    @Setter
+    private HykPos hykPos;
 
     public final KeyBinding[] keyBindings = new KeyBinding[4];
 
@@ -60,6 +54,8 @@ public class HypixelKentik {
 
     @Getter
     private static HypixelKentik instance;
+
+    public static File dir;
 
     private final Utils utils;
 
@@ -85,8 +81,17 @@ public class HypixelKentik {
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
+    public void preinit(FMLPreInitializationEvent event) {
+        dir = new File(event.getModConfigurationDirectory() ,"hyk");
+        dir.mkdirs();
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event) throws IOException {
+        hyConfig = new HyConfig(new File(dir,"hyk.toml"));
         hyConfig.preload();
+
+        enablepos();
 
         MinecraftForge.EVENT_BUS.register(this);
         ClientCommandHandler.instance.registerCommand(new HyK());
@@ -120,21 +125,6 @@ public class HypixelKentik {
         MinecraftForge.EVENT_BUS.register(new BankHook());
         MinecraftForge.EVENT_BUS.register(new SwHook());
 
-        //gui
-        ClientCommandHandler.instance.registerCommand(new Move());
-        ClientCommandHandler.instance.registerCommand(new Scale());
-
-        Move.mainXY[0] = hyConfig.getMainx();
-        Move.mainXY[1] = hyConfig.getMainy();
-        Move.cakeXY[0] = hyConfig.getCakex();
-        Move.cakeXY[1] = hyConfig.getCakey();
-        Move.armorXY[0] = hyConfig.getArmorx();
-        Move.armorXY[1] = hyConfig.getArmory();
-        Move.commsXY[0] = hyConfig.getCommsx();
-        Move.commsXY[1] = hyConfig.getCommsy();
-        Scale.mainScale = Double.parseDouble(hyConfig.getScale());
-        Scale.sizerScale = Double.parseDouble(hyConfig.getSizescale());
-
         MinecraftForge.EVENT_BUS.register(newScheduler);
 
         keyBindings[0] = new KeyBinding("HYK Config", Keyboard.KEY_P, NAME);
@@ -145,6 +135,18 @@ public class HypixelKentik {
         for (KeyBinding keyBinding : keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
+
+    }
+
+    @Mod.EventHandler
+    public void onPostInit(final FMLPostInitializationEvent event) {
+        Updater.builder()
+                .name("Hyk")
+                .currentVersion(this.VERSION)
+                .changelogUrl("https://raw.githubusercontent.com/a0gzy/Hyk/master/changelog")
+                .downloadUrl("https://github.com/a0gzy/Hyk/releases/latest")
+                .build()
+                .checkAsync();
 
     }
 
@@ -177,12 +179,6 @@ public class HypixelKentik {
             Minecraft mc = Minecraft.getMinecraft();
             if (guiToOpen.equalsIgnoreCase("editlocations")) {
                 mc.displayGuiScreen(new EditLocationsGui());
-            }
-            if (guiToOpen.startsWith("hykgui")) {
-                int page = Character.getNumericValue(guiToOpen.charAt(guiToOpen.length() - 1));
-                String selection = guiToOpen.replaceAll("hykgui", "");
-                selection = selection.replaceAll("[0-9]", "");
-                mc.displayGuiScreen(new HykGui(page, selection));
             }
             guiToOpen = null;
         }
@@ -218,6 +214,23 @@ public class HypixelKentik {
             }
         }
         return true;
+    }
+
+    public void enablepos() {
+        try {
+            hykPos = HykPos.load();
+            FMLLog.info("hykpos loaded");
+           // hykPos = (HykPos) ConfigTweaker.load("hykpos.json",HykPos.class);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            if(hykPos == null){
+                hykPos = new HykPos();
+                FMLLog.info("hykpos new");
+            }
+            // Write the default config that we just made to save it
+            hykPos.save();
+            FMLLog.info("hykpos saved");
+        }
     }
 
 

@@ -8,23 +8,27 @@ import org.lwjgl.opengl.GL11;
 public class TextRenderer extends Gui {
 
     public TextRenderer(Minecraft mc, String text, int x, int y, double scale) {
-        double scaleReset = Math.pow(scale, -1);
+        try {
+            double scaleReset = Math.pow(scale, -1);
 
-        GL11.glScaled(scale, scale, scale);
-        y -= mc.fontRendererObj.FONT_HEIGHT;
-        for (String line : text.split("\n")) {
-            y += mc.fontRendererObj.FONT_HEIGHT * scale;
+            GL11.glScaled(scale, scale, scale);
+            y -= mc.fontRendererObj.FONT_HEIGHT * scale;
+            for (String line : text.split("\n")) {
+                y += mc.fontRendererObj.FONT_HEIGHT * scale;
 
-            mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), 0xFFFFFF, true);
+                mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), 0xFFFFFF, true);
+            }
+            GL11.glScaled(scaleReset, scaleReset, scale);
+        }catch (Exception e){
+
         }
-        GL11.glScaled(scaleReset, scaleReset, scaleReset);
     }
 
     public TextRenderer(Minecraft mc, String text, int x, int y, double scale,int color) {
         double scaleReset = Math.pow(scale, -1);
 
         GL11.glScaled(scale, scale, scale);
-        y -= mc.fontRendererObj.FONT_HEIGHT;
+        y -= mc.fontRendererObj.FONT_HEIGHT * scale;
         for (String line : text.split("\n")) {
             y += mc.fontRendererObj.FONT_HEIGHT * scale;
             mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), color, true);

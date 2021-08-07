@@ -1,25 +1,15 @@
 package me.a0g.hyk.commands;
 
-import gg.essential.api.EssentialAPI;
 import gg.essential.api.utils.GuiUtil;
 import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.chest.Player;
 import me.a0g.hyk.events.Cakes;
 import me.a0g.hyk.tweaker.asm.hooks.FontRendererHook;
-import me.a0g.hyk.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -131,6 +121,12 @@ public class HyK extends CommandBase{
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("edit")){
 			HypixelKentik.guiToOpen = "editlocations";
+		}
+
+		else if(args.length == 1 && args[0].equalsIgnoreCase("edit2")){
+			//HypixelKentik.guiToOpen = "edit2";
+			//HypixelKentik.guiToOpen = "editlocations";
+			//GuiUtil.open(Objects.requireNonNull(new LocationsEditGui()));
 		}
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("gui")){

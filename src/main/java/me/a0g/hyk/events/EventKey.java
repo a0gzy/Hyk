@@ -2,26 +2,19 @@ package me.a0g.hyk.events;
 
 import gg.essential.api.utils.GuiUtil;
 import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.chest.Presents;
+import me.a0g.hyk.gui.EditLocationsGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemSkull;
-import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.sql.ResultSet;
 import java.util.Objects;
 
 public class EventKey {
@@ -39,7 +32,21 @@ public class EventKey {
         // P
         if (keyBindings[0].isPressed()) {
 
-            GuiUtil.open(Objects.requireNonNull(main.getHyConfig().gui()));
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+                //HypixelKentik.guiToOpen = "edit2";
+                GuiUtil.open(Objects.requireNonNull(new EditLocationsGui()));
+                return;
+            }
+
+          //  Minecraft.getMinecraft().displayGuiScreen(main.getHyConfig().gui());
+            try {
+                GuiUtil.open(Objects.requireNonNull(main.getHyConfig().gui()));
+            }catch (Exception e){
+                e.printStackTrace();
+                main.getHyConfig().preload();
+            }
+
+           // GuiUtil.open(main.getHyConfig().gui());
            // ModCore.getInstance().getGuiHandler().open(main.getHyConfig().gui());
 
         }
