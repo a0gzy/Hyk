@@ -1,6 +1,8 @@
 # Hyk
 Minecraft Mod
 
+### Set JAVA_HOME as environment variable
+
 ### Getting started
 
 1. Clone the repository
