@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraftforge.fml.common.FMLLog;
 
 import java.awt.*;
 import java.util.Locale;
@@ -23,19 +24,21 @@ public class FontRendererHook {
 
         try {
 
-            if (text.matches("(.+)?.(MVP§.+) (§.)?a0g(.+)?") && a0g) {  //   §b[MVP§0+§b] a0g joined
-                text = text.replaceAll(".(MVP§.+§.). a0g", "§c[§f§ks§6§lGOD§f§ks§c] a0g");
+            if (text.matches("(.+)?(§..MVP(§.)+[+]+(§.)+] a0g)(.+)?") && a0g) {  //   §b[MVP§0+§b] a0g joined   §r§b[MVP§r§0+§r§b] a0g
+              //  FMLLog.info("da " + text);
+                text = text.replaceAll("(§..MVP(§.)+[+]+(§.)+] a0g)", "§c[§f§ks§6§lGOD§f§ks§c] a0g"); //((§r)?§..MVP(§r)?§.[+]+(§r)?§.] a0g)
             }
             if (text.contains("a0g") && a0g) {
+                //FMLLog.info(text);
                 String spl = "r";
-                if (text.matches("(.+)?§.§.a0g(.+)?")) {
+                if (text.matches("(.+)?§.§.a0g(.+)?")) {  // §r§a§oa0g's
                     String[] splited = text.split("a0g");
                     if (!splited[0].isEmpty()) {
                         spl = splited[0].charAt(splited[0].length() - 1) + "";
                         String spl2 = "" + splited[0].charAt(splited[0].length() - 3);
-                        if (spl.matches("[klmnor]")) {
-                            spl = "r";
-                        }
+                       // if (spl.matches("[klmnor]")) {
+                       //     spl = "r";
+                       // }
                         spl = spl2 + "§" + spl;
                     }
                 } else if (text.matches("(.+)?§.a0g(.+)?")) {
@@ -49,6 +52,9 @@ public class FontRendererHook {
                 }
                 text = text.replaceAll("a0g", "§3§oa0g§" + spl);
             }
+            /*if (text.contains("LO1D")) {
+                text = text.replaceAll("LO1D", "Լոիդ");
+            }*/
         /*if (text.matches("(.+)?.(VIP.) (§.)?TechDavo(.+)?")) {  //   §b[MVP§0+§b] a0g joined
             text = text.replaceAll(".(VIP). TechDavo", "§e[§pGAY§e] §aDavo§c♥");
         }
@@ -92,10 +98,6 @@ public class FontRendererHook {
 
                     //return fname;
                 }
-            }
-
-            if (text.contains("LO1D")) {
-                text = text.replaceAll("LO1D", "Լոիդ");
             }
             // }
 

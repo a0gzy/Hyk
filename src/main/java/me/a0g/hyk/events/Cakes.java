@@ -45,6 +45,10 @@ public class Cakes {
     public void onChatReceived(ClientChatReceivedEvent event) {
         String unformattedText = event.message.getUnformattedText();
 
+       /* if(unformattedText.contains("a0g")){
+            FMLLog.info(event.message.getFormattedText());
+        }*/
+
         //actionbar
         if(event.type == 2){
             //if(unformattedText.contains("Farming")){
