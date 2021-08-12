@@ -7,6 +7,8 @@ public class ButtonFeature extends GuiButton {
 
     public Feature feature;
 
+    // asd
+
     ButtonFeature(int buttonId, int x, int y, String buttonText, Feature feature) {
         super(buttonId, x, y, buttonText);
         this.feature = feature;
