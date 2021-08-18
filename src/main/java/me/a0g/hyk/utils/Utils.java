@@ -593,14 +593,26 @@ public class Utils {
         }
     }
 
+    /*public String formatNumbers(String niceNumber){
+        if(niceNumber.contains(".0")){
+            niceNumber.replace(".0","");
+        }
+        return niceNumber;
+    }*/
+
     public String nicenumbers(int number){
 
-        if (number > 1000000) {
+        if(number >= 1000000000){
+            double smnum = Math.round(number / 100000000) / 10.0;
+
+            return smnum + "B";
+        }
+        else if (number >= 1000000) {
 
             double smnum = Math.round(number / 100000) / 10.0;
 
             return smnum + "M";
-        } else if (number > 1000) {
+        } else if (number >= 1000) {
 
             //12333
             //123

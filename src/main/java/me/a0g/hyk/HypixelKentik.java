@@ -32,6 +32,8 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 @Getter
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
@@ -69,6 +71,10 @@ public class HypixelKentik {
 
     private final DiscordRPCManager discordRPCManager;
 
+    private NumberFormat numberFormatter;
+
+    @Setter private  boolean isBinShow = false;
+
     public HypixelKentik() {
         instance = this;
 
@@ -78,6 +84,8 @@ public class HypixelKentik {
         textUtils = new TextUtils();
         newScheduler = new NewScheduler();
         discordRPCManager = new DiscordRPCManager();
+        numberFormatter = NumberFormat.getNumberInstance(Locale.US);
+        numberFormatter.setMaximumFractionDigits(0);
     }
 
     @Mod.EventHandler
@@ -120,6 +128,8 @@ public class HypixelKentik {
         MinecraftForge.EVENT_BUS.register(new FairyTest());
         MinecraftForge.EVENT_BUS.register(new BatSp());
         MinecraftForge.EVENT_BUS.register(new Presents());
+
+        MinecraftForge.EVENT_BUS.register(new TooltipListener());
 
 
         MinecraftForge.EVENT_BUS.register(new BankHook());

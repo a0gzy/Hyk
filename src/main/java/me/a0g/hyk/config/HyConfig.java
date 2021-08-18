@@ -208,12 +208,30 @@ public class HyConfig extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
+            name = "Price",
+            category = "SkyBlock",
+            subcategory = "Price",
+            description = "Display price per each on bin"
+    )
+    private boolean sbPriceEach = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
             name = "Rarity",
             category = "SkyBlock",
             subcategory = "Rarity",
             description = "Rarity display"
     )
     private boolean sbrarity = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "IsEnchanted",
+            category = "SkyBlock",
+            subcategory = "Rarity",
+            description = "Enchanted display"
+    )
+    private boolean sbIsEnch = false;
 
     @Property(
             type = PropertyType.SLIDER,

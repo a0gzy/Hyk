@@ -338,24 +338,32 @@ public class Render {
 
 	//public static boolean isMuted
 
+
 	@SubscribeEvent
 	public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
 
+		ScaledResolution sr = new ScaledResolution(mc);
+
+		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiChest && isAuctionsGui(event.gui)){
+			GuiChest eventGui = (GuiChest) event.gui;
+			ContainerChest cc = (ContainerChest) eventGui.inventorySlots;
+			String containerName = cc.getLowerChestInventory().getDisplayName().getUnformattedText();
+
+			if(containerName != null && containerName.contains("Auction")) {
+				Gui.drawRect(20, 28, 20 + 45, 40, Color.WHITE.getRGB());
+				new TextRenderer(mc, "Bin show", 22, 30, 1, Color.ORANGE.getRGB(),true);
+			}
+		}
+
 		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiInventory && main.getHyConfig().isGamemute()){
 
-
-			//main.getUtils().drawModalRectWithCustomSizedTexture();
-			ScaledResolution sr = new ScaledResolution(mc);
-
-
-			//FMLLog.info("Y");
 			Gui.drawRect(sr.getScaledWidth()/2 - 20,28, sr.getScaledWidth()/2 +20,40, Color.WHITE.getRGB());
 
 			if(!HyK.ismuted) {
-				new TextRenderer(mc, "Mute", sr.getScaledWidth()/2 - 10, 30, 1,Color.pink.getRGB());
+				new TextRenderer(mc, "Mute", sr.getScaledWidth()/2 - 10, 30, 1,Color.pink.getRGB(),true);
 			}
 			else {
-				new TextRenderer(mc, "UnMute", sr.getScaledWidth()/2 - 17, 30, 1,Color.pink.getRGB());
+				new TextRenderer(mc, "UnMute", sr.getScaledWidth()/2 - 17, 30, 1,Color.pink.getRGB(),true);
 			}
 		}
 	}
@@ -363,9 +371,7 @@ public class Render {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public void onGuiDraw(GuiScreenEvent.MouseInputEvent.Post event) {
 
-
-
-		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiInventory && main.getHyConfig().isGamemute()){
+		if(shouldRenderOverlay(event.gui)) {
 
 			ScaledResolution sr = new ScaledResolution(mc);
 			GuiScreen guiScreen = Minecraft.getMinecraft().currentScreen;
@@ -373,23 +379,44 @@ public class Render {
 			int mouseY = sr.getScaledHeight() - Mouse.getY() * sr.getScaledHeight() / Minecraft.getMinecraft().displayHeight - 1;
 			boolean hoveringButton = false;
 
-			if(mouseX >= sr.getScaledWidth()/2 - 20 && mouseX <= sr.getScaledWidth()/2 + 20 &&
-					mouseY >= 28 && mouseY <= 40 && Mouse.isButtonDown(0)){
-
-				if(HyK.ismuted){
-					float value = main.getHyConfig().getGamemutefloat();
-					Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,value);
+			if (event.gui instanceof GuiChest && isAuctionsGui(event.gui)) {
+				if (mouseX >= 20 && mouseX <= ( 20 + 45 ) &&
+						mouseY >= 28 && mouseY <= 40 && Mouse.isButtonDown(0)) {
+					main.setBinShow(!main.isBinShow());
 				}
-				else {
-					main.getHyConfig().setGamemutefloat(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER));
-					main.getHyConfig().markDirty();
-					main.getHyConfig().writeData();
-					Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0);
-				}
-				HyK.ismuted = !HyK.ismuted;
+			}
 
+
+			if ( event.gui instanceof GuiInventory && main.getHyConfig().isGamemute()) {
+
+				if (mouseX >= sr.getScaledWidth() / 2 - 20 && mouseX <= sr.getScaledWidth() / 2 + 20 &&
+						mouseY >= 28 && mouseY <= 40 && Mouse.isButtonDown(0)) {
+
+					if (HyK.ismuted) {
+						float value = main.getHyConfig().getGamemutefloat();
+						Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER, value);
+					} else {
+						main.getHyConfig().setGamemutefloat(Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER));
+						main.getHyConfig().markDirty();
+						main.getHyConfig().writeData();
+						Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER, 0);
+					}
+					HyK.ismuted = !HyK.ismuted;
+
+				}
 			}
 		}
+	}
+	private static boolean isAuctionsGui(Gui gui) {
+		if(gui instanceof GuiChest) {
+			GuiChest eventGui = (GuiChest) gui;
+			ContainerChest cc = (ContainerChest) eventGui.inventorySlots;
+			String containerName = cc.getLowerChestInventory().getDisplayName().getUnformattedText();
+			if(containerName.trim().contains("Auction")) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static boolean shouldRenderOverlay(Gui gui) {

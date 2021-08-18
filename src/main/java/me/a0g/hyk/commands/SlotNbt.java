@@ -1,11 +1,18 @@
 package me.a0g.hyk.commands;
 
 import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.utils.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.FMLLog;
+
+import java.util.List;
 
 public class SlotNbt extends CommandBase {
 
@@ -50,6 +57,21 @@ public class SlotNbt extends CommandBase {
 
                 //item lore
                 String tocompact = pl.getHeldItem().getTagCompound().getCompoundTag("display").getTag("Lore").toString();
+
+                /*NBTTagCompound compound = pl.getHeldItem().getTagCompound().getCompoundTag("display");
+                NBTTagList nbtTagList = compound.getTagList("Lore", Constants.NBT.TAG_COMPOUND);
+                for(int i = 0;i<nbtTagList.tagCount();i++){
+                 //   NBTTagCompound tag = nbtTagList.getCompoundTagAt(i);
+                   // tag.
+                    String tagString = nbtTagList.getStringTagAt(i);
+                    FMLLog.info(tagString);
+                }*/
+                List<String> lores = ItemUtils.getItemLore(stack);
+                for(String lore : lores){
+                    FMLLog.info(lore);
+                }
+                FMLLog.info(lores.toString());
+
 
                 main.getUtils().sendMessage(tocompact);
 

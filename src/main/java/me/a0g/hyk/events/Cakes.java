@@ -73,7 +73,7 @@ public class Cakes {
             String fdate = date.getTime() + "";
 
             main.getHyConfig().setCakepicked(fdate);
-            main.getUtils().sendMessage(main.getHyConfig().getCakepicked());
+            //main.getUtils().sendMessage(main.getHyConfig().getCakepicked());
             main.getHyConfig().markDirty();
             main.getHyConfig().writeData();
 

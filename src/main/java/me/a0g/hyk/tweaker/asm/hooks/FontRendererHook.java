@@ -26,7 +26,7 @@ public class FontRendererHook {
 
             if (text.matches("(.+)?(§..MVP(§.)+[+]+(§.)+] a0g)(.+)?") && a0g) {  //   §b[MVP§0+§b] a0g joined   §r§b[MVP§r§0+§r§b] a0g
               //  FMLLog.info("da " + text);
-                text = text.replaceAll("(§..MVP(§.)+[+]+(§.)+] a0g)", "§c[§f§ks§6§lGOD§f§ks§c] a0g"); //((§r)?§..MVP(§r)?§.[+]+(§r)?§.] a0g)
+                text = text.replaceAll("(§..MVP(§.)+[+]+(§.)+] a0g)", "§3[§dWHY§5§k?§3] a0g"); // §c[§f§ks§6§lGOD§f§ks§c] a0g
             }
             if (text.contains("a0g") && a0g) {
                 //FMLLog.info(text);
@@ -50,7 +50,7 @@ public class FontRendererHook {
                         }
                     }
                 }
-                text = text.replaceAll("a0g", "§3§oa0g§" + spl);
+                text = text.replaceAll("a0g", "§ca0g§" + spl); //§3§oa0g§
             }
             /*if (text.contains("LO1D")) {
                 text = text.replaceAll("LO1D", "Լոիդ");
