@@ -1,3 +1,5 @@
+3.0.3
+- ASM things and fixes MNOGO
 3.0.2
 Improved Auction 
 -show bin on items (while shift/button)
@@ -5,11 +7,3 @@ Improved Auction
 
 Topaz gemstone waypoints
 with skytils /hyk waypoints
-3.0.1
-- Little fix
-3.0.0
-- **Feature Base**
-- **JSON Positions and Scales Config**
-- **Updater**
-- _lo1d fix_
--  -danreal mute
