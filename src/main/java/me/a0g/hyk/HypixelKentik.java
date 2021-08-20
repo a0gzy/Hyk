@@ -1,6 +1,8 @@
 package me.a0g.hyk;
 
 import gg.essential.api.EssentialAPI;
+import gg.essential.api.utils.Multithreading;
+import gg.essential.universal.UDesktop;
 import kotlin.Unit;
 import lombok.Getter;
 import lombok.Setter;
@@ -157,6 +159,8 @@ public class HypixelKentik {
 
     public Map<String, ModContainer> mods;
 
+   // @Setter private String notification;
+
     @Mod.EventHandler
     public void onPostInit(final FMLPostInitializationEvent event) {
 
@@ -180,42 +184,9 @@ public class HypixelKentik {
                 .build()
                 .checkAsync();
 
+
     }
 
-    public String notification = null;
-
-    @Mod.EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event) {
-        if(notification != null){
-            EssentialAPI.getNotifications().push(
-                    notification,
-                    "Click to Open URL",
-                    15f,
-                    () -> {
-                        openDownloadLink();
-
-                        return Unit.INSTANCE;
-                    }
-            );
-           // EssentialAPI.getNotifications().
-        }
-    }
-
-    private void openDownloadLink()
-    {
-        try
-        {
-            URI uri = new URI("https://github.com/a0gzy/Hyk/releases/latest");
-
-            Class<?> oclass = Class.forName("java.awt.Desktop");
-            Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object)null, new Object[0]);
-            oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
-        }
-        catch (Throwable throwable)
-        {
-            //LOGGER.error("Couldn\'t open link", throwable);
-        }
-    }
 
     static int tickAmount = 1;
 

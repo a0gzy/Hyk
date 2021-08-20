@@ -1,9 +1,15 @@
 package me.a0g.hyk.utils;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.ForkJoinPool;
 
+import gg.essential.api.EssentialAPI;
+import gg.essential.api.utils.Multithreading;
+import gg.essential.universal.UDesktop;
+import kotlin.Unit;
 import me.a0g.hyk.HypixelKentik;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -11,6 +17,7 @@ import net.minecraft.event.HoverEvent.Action;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,9 +87,40 @@ public class Updater {
                 .appendText(changelogBuilder.toString())
                 .appendText("\n§9------------------------------------------------------");
 
+        String notification = "Hyk is outdated. " + this.currentVersion + " -> " + latestVersion + ".";
+
+        //HypixelKentik.getInstance().setNotification("Hyk is outdated. " + this.currentVersion + " -> " + latestVersion + ".");
+        //FMLLog.info("Hyk outdated" + notification);
+
+        Multithreading.runAsync(() -> {
+
+            try {
+
+                if (!notification.isEmpty()) {
+                    EssentialAPI.getNotifications().push(
+                            notification,
+                            "Click to Open URL",
+                            10f,
+                            () -> {
+
+                                try {
+                                    UDesktop.browse(new URI("https://github.com/a0gzy/Hyk/releases/latest"));
+                                } catch (URISyntaxException e) {
+                                    e.printStackTrace();
+                                }
+                                FMLLog.info("Poyavilos");
+                                return Unit.INSTANCE;
+                            }
+                    );
+                }
+            }catch (NullPointerException e) {
+
+            }
+        });
+
         new OneTimeJoinMessage(component).register();
 
-        HypixelKentik.getInstance().notification = "Hyk is outdated. " + this.currentVersion + " -> " + latestVersion + ".";
+
     }
 
     public void checkAsync() {
