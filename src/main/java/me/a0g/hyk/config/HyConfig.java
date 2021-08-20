@@ -369,10 +369,10 @@ public class HyConfig extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
-            name = "Xr",
+            name = "Iksrey",
             category = "Private",
             subcategory = "General",
-            description = "Toggle XR."
+            description = "Allows to toggle iksrey with x when enabled."
     )
     private boolean xr = false;
 

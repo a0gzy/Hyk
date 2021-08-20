@@ -167,6 +167,19 @@ public class InstructionBuilder {
         return this;
     }
 
+    // Constants
+    public InstructionBuilder constantBooleanValue(int value) {
+        if (value == 0) {
+            instructions.add(new InsnNode(Opcodes.ICONST_0));
+        } if (value == 1) {
+            instructions.add(new InsnNode(Opcodes.ICONST_1));
+        }  else {
+            instructions.add(new LdcInsnNode(value));
+        }
+        currentType = VariableType.BOOLEAN;
+        return this;
+    }
+
     // Return
     @SuppressWarnings("SpellCheckingInspection")
     public InstructionBuilder reeturn() { // TODO Does returning in a void method work?

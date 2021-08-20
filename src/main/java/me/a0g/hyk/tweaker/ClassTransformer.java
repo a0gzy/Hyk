@@ -48,7 +48,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new FontRendererTransformer());
         registerTransformer(new RenderItemTransformer());
         registerTransformer(new EntityRendererTransformer());
-        //registerTransformer(new BlockTransformer());
+        registerTransformer(new BlockTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {

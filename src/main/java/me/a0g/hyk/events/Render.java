@@ -94,8 +94,8 @@ public class Render {
 				new TextRenderer(mc,"§bGame Muted",250,50,1);
 			}
 
-			if(main.getHyConfig().isXr()){
-				new TextRenderer(mc,"X",5,5,1);
+			if(main.getHyConfig().isXr() && main.hray){
+				new TextRenderer(mc,"X",5,30,1);
 			}
 
 			//testcolor

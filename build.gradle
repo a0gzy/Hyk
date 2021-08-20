@@ -4,7 +4,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "6f53277"
 }
 
-version = "3.0.1"
+version = "3.0.3"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
@@ -131,6 +131,8 @@ jar {
                 "FMLCorePluginContainsFMLMod": "true",
                 "ForceLoadAsMod": "true",
                 "FMLCorePlugin": "me.a0g.hyk.tweaker.ASMTweaker",
+                "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
+                "TweakOrder": "0",
                 "ModSide": "CLIENT",
                 "FMLAT": "hyk_at.cfg"
         )

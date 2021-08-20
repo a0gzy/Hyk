@@ -34,7 +34,10 @@ public class MinecraftTransformer implements ITransformer {
                 // insert an instruction list before final return
                 method.instructions.insertBefore(method.instructions.getFirst(), sayBruh2());
                 // stop looping through methods as we've found the one we need
-                break;
+                //break;
+            }
+            if(methodName.equals("shutdown") || methodName.equals("func_71400_g")) {//shutdown
+                method.instructions.insertBefore(method.instructions.getFirst(), rpcOff());
             }
            /* if (methodName.equals("startGame") || methodName.equals("func_71384_a")) {
                 // insert an instruction list before final return
@@ -67,6 +70,19 @@ public class MinecraftTransformer implements ITransformer {
         list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, //
                 "me/a0g/hyk/tweaker/asm/hooks/MinecraftHook",
                 "hitfix",
+                "()V",
+                false));
+
+        return list;
+    }
+
+    private InsnList rpcOff() {
+        // create a new instruction list
+        InsnList list = new InsnList();
+
+        list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, //
+                "me/a0g/hyk/tweaker/asm/hooks/MinecraftHook",
+                "disableRpc",
                 "()V",
                 false));
 

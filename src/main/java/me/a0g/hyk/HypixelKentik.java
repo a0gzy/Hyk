@@ -1,5 +1,7 @@
 package me.a0g.hyk;
 
+import gg.essential.api.EssentialAPI;
+import kotlin.Unit;
 import lombok.Getter;
 import lombok.Setter;
 import me.a0g.hyk.chest.*;
@@ -22,24 +24,27 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 
 @Getter
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.1";
+    public static final String VERSION = "3.0.3";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -72,6 +77,8 @@ public class HypixelKentik {
     private final DiscordRPCManager discordRPCManager;
 
     private NumberFormat numberFormatter;
+
+    public Boolean hray = false;
 
     @Setter private  boolean isBinShow = false;
 
@@ -148,8 +155,23 @@ public class HypixelKentik {
 
     }
 
+    public Map<String, ModContainer> mods;
+
     @Mod.EventHandler
     public void onPostInit(final FMLPostInitializationEvent event) {
+
+        mods = Loader.instance().getIndexedModList();
+
+        /*if(Loader.isModLoaded("SkyblockExtras")){
+            FMLLog.info("SBE TYT");
+            FMLLog.info(mods.get("SkyblockExtras").getMod() + "");
+        }*/
+
+        //mods.get("SkyblockExtras").getOwnedPackages(); // SkyblockExtras=FMLMod:SkyblockExtras{2.1.5},
+       // Mod sbe = (Mod) mods.get("SkyblockExtras").getMod();
+       // sbe.
+        //Loader.isModLoaded()
+
         Updater.builder()
                 .name("Hyk")
                 .currentVersion(this.VERSION)
@@ -158,6 +180,41 @@ public class HypixelKentik {
                 .build()
                 .checkAsync();
 
+    }
+
+    public String notification = null;
+
+    @Mod.EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
+        if(notification != null){
+            EssentialAPI.getNotifications().push(
+                    notification,
+                    "Click to Open URL",
+                    15f,
+                    () -> {
+                        openDownloadLink();
+
+                        return Unit.INSTANCE;
+                    }
+            );
+           // EssentialAPI.getNotifications().
+        }
+    }
+
+    private void openDownloadLink()
+    {
+        try
+        {
+            URI uri = new URI("https://github.com/a0gzy/Hyk/releases/latest");
+
+            Class<?> oclass = Class.forName("java.awt.Desktop");
+            Object object = oclass.getMethod("getDesktop", new Class[0]).invoke((Object)null, new Object[0]);
+            oclass.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
+        }
+        catch (Throwable throwable)
+        {
+            //LOGGER.error("Couldn\'t open link", throwable);
+        }
     }
 
     static int tickAmount = 1;

@@ -3,6 +3,8 @@ package me.a0g.hyk.utils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ForkJoinPool;
+
+import me.a0g.hyk.HypixelKentik;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.event.HoverEvent.Action;
@@ -79,6 +81,8 @@ public class Updater {
                 .appendText("\n§9------------------------------------------------------");
 
         new OneTimeJoinMessage(component).register();
+
+        HypixelKentik.getInstance().notification = "Hyk is outdated. " + this.currentVersion + " -> " + latestVersion + ".";
     }
 
     public void checkAsync() {

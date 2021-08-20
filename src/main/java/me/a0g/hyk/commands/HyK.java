@@ -3,6 +3,7 @@ package me.a0g.hyk.commands;
 import gg.essential.api.utils.GuiUtil;
 import me.a0g.hyk.HypixelKentik;
 import me.a0g.hyk.chest.Player;
+import me.a0g.hyk.core.Feature;
 import me.a0g.hyk.events.Cakes;
 import me.a0g.hyk.tweaker.asm.hooks.FontRendererHook;
 import net.minecraft.client.Minecraft;
@@ -18,10 +19,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.FMLLog;
 
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class HyK extends CommandBase{
 
@@ -44,6 +42,20 @@ public class HyK extends CommandBase{
 
 
 	public static boolean ismuted = false;
+
+	private final Set<String> waypoints = new LinkedHashSet<>(Arrays.asList("/skytilshollowwaypoint set 1 353 61 267",
+			"/skytilshollowwaypoint set 2 347 59 268","/skytilshollowwaypoint set 3 344 61 263",
+			"/skytilshollowwaypoint set 4 351 61 258","/skytilshollowwaypoint set 5 357 53 260",
+			"/skytilshollowwaypoint set 6 348 49 272","/skytilshollowwaypoint set 7 338 52 254",
+			"/skytilshollowwaypoint set 8 341 52 243","/skytilshollowwaypoint set 9 343 52 239",
+			"/skytilshollowwaypoint set 10 326 51 246","/skytilshollowwaypoint set 11 326 56 261",
+			"/skytilshollowwaypoint set 12 318 50 253","/skytilshollowwaypoint set 13 344 48 231",
+			"/skytilshollowwaypoint set 14 307 51 254","/skytilshollowwaypoint set 15 334 46 260",
+			"/skytilshollowwaypoint set 16 300 51 237","/skytilshollowwaypoint set 17 298 48 258",
+			"/skytilshollowwaypoint set 18 291 47 266",
+			"/skytilshollowwaypoint set bomb1 353 48 262", "/skytilshollowwaypoint set bomb2 343 45 256",
+			"/skytilshollowwaypoint set bomb3 337 45 245","/skytilshollowwaypoint set bomb4 327 44 257",
+			"/skytilshollowwaypoint set bomb5 314 45 254","/skytilshollowwaypoint set bomb6 298 44 262"));
 
 	@Override
 	public String getCommandName() {
@@ -136,6 +148,11 @@ public class HyK extends CommandBase{
 			HypixelKentik.guiToOpen = "hykguiGeneral1";
 		}
 
+		else if(args.length == 1 && args[0].equalsIgnoreCase("getMods")){
+			//FMLLog.info(main.mods + "");
+			main.getUtils().sendMessage(main.mods + "");
+		}
+
 		else if(args.length == 1 && args[0].equalsIgnoreCase("waypoints")){
 
 				new Thread(() -> {
@@ -143,61 +160,15 @@ public class HyK extends CommandBase{
 
 						EntityPlayerSP pl = Minecraft.getMinecraft().thePlayer;
 
-
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 1 353 61 267");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 2 347 59 268");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 3 344 61 263");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 4 351 61 258");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 5 357 53 260");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 6 348 49 272");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 7 338 52 254");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 8 341 52 243");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 9 343 52 239");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 10 326 51 246");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 11 326 56 261");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 12 318 50 253");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 13 344 48 231");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 14 307 51 254");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 15 334 46 260");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 16 300 51 237");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 17 298 48 258");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set 18 291 47 266");
-						Thread.sleep(1000);
-
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb1 353 48 262");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb2 343 45 256");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb3 337 45 245");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb4 327 44 257");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb5 314 45 254");
-						Thread.sleep(1000);
-						ClientCommandHandler.instance.executeCommand(pl, "/skytilshollowwaypoint set bomb6 298 44 262");
-						Thread.sleep(1000);
+						for (String command : waypoints){
+							if(ClientCommandHandler.instance.executeCommand(pl,command) != 0){
+								//ClientCommandHandler.instance.executeCommand(pl,command); // nyshno li
+							}
+						}
 
 
 
-
-					}catch (ConcurrentModificationException | InterruptedException e){
+					}catch (ConcurrentModificationException e){
 						//
 					}
 				}).start();

@@ -63,14 +63,14 @@ public class EventKey {
 
         }
 
+        if(main.getHyConfig().isXr() && Keyboard.isKeyDown(Keyboard.KEY_X) || (main.hray && Keyboard.isKeyDown(Keyboard.KEY_X) )){
+            //main.getHyConfig().setXr(!main.getHyConfig().isXr());
+            main.hray = !main.hray;
+            Minecraft.getMinecraft().renderGlobal.loadRenderers();
+        }
+
         //farm  H
         if(keyBindings[3].isPressed()){
-
-            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-                main.getHyConfig().setXr(!main.getHyConfig().isXr());
-                Minecraft.getMinecraft().renderGlobal.loadRenderers();
-                return;
-            }
 
             if(Render.farm){
 
