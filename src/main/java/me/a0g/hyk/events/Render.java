@@ -342,6 +342,10 @@ public class Render {
 	@SubscribeEvent
 	public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
 
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			new TextRenderer(Minecraft.getMinecraft(), event.gui.toString(), 10, 10, 1, Color.ORANGE.getRGB(), true);
+		}
+
 		ScaledResolution sr = new ScaledResolution(mc);
 
 		if(shouldRenderOverlay(event.gui) && event.gui instanceof GuiChest && isAuctionsGui(event.gui)){

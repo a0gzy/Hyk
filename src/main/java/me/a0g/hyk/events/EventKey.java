@@ -63,10 +63,18 @@ public class EventKey {
 
         }
 
-        if(main.getHyConfig().isXr() && Keyboard.isKeyDown(Keyboard.KEY_X) || (main.hray && Keyboard.isKeyDown(Keyboard.KEY_X) )){
-            //main.getHyConfig().setXr(!main.getHyConfig().isXr());
-            main.hray = !main.hray;
-            Minecraft.getMinecraft().renderGlobal.loadRenderers();
+
+
+        //x
+        if(keyBindings[4].isPressed()){
+            if(main.getUtils().checkForSkyblock()) {
+                if (main.getHyConfig().isXr() || main.hray) {
+
+                    main.hray = !main.hray;
+                    Minecraft.getMinecraft().renderGlobal.loadRenderers();
+                    return;
+                }
+            }
         }
 
         //farm  H

@@ -21,14 +21,21 @@ public class BlockTransformer implements ITransformer {
     public void transform(ClassNode classNode, String name) {
         for (MethodNode methodNode  : classNode.methods) {
             // map the method to searge
-           // String methodName = mapMethodName(classNode, method);
+            String methodName = mapMethodName(classNode, methodNode);
 
-           /* if (methodName.equalsIgnoreCase("shouldSideBeRendered")
-                    || methodName.equalsIgnoreCase("func_176225_a")) {*/
+            if (methodName.equalsIgnoreCase("shouldSideBeRendered")
+                    || methodName.equalsIgnoreCase("func_176225_a")) {
 
-                if (InjectionHelper.matches(methodNode, TransformerMethod.shouldSideBeRendered)) {
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(),sayBruh());
+            }
+            if (methodName.equalsIgnoreCase("getMixedBrightnessForBlock")
+                    || methodName.equalsIgnoreCase("func_176207_c")) {
+                methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), sayBruh2());
+            }
 
-                    /*InjectionHelper.start()
+               /* if (InjectionHelper.matches(methodNode, TransformerMethod.shouldSideBeRendered)) {
+
+                    *//*InjectionHelper.start()
                             .matchMethodHead()
 
                             .startCode()
@@ -52,12 +59,12 @@ public class BlockTransformer implements ITransformer {
                             .endCode()
 
                             .finish();
-                    return;*/
+                    return;*//*
 
-                    methodNode.instructions.insertBefore(methodNode.instructions.getFirst(),sayBruh());
+
                 } else if (InjectionHelper.matches(methodNode, TransformerMethod.getMixedBrightnessForBlock)) {
                     methodNode.instructions.insertBefore(methodNode.instructions.getFirst(), sayBruh2());
-                }
+                }*/
         }
     }
 

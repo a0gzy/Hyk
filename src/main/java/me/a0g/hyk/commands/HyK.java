@@ -1,5 +1,6 @@
 package me.a0g.hyk.commands;
 
+import gg.essential.api.EssentialAPI;
 import gg.essential.api.utils.GuiUtil;
 import me.a0g.hyk.HypixelKentik;
 import me.a0g.hyk.chest.Player;
@@ -151,6 +152,11 @@ public class HyK extends CommandBase{
 		else if(args.length == 1 && args[0].equalsIgnoreCase("getMods")){
 			//FMLLog.info(main.mods + "");
 			main.getUtils().sendMessage(main.mods + "");
+		}
+
+		else if(args.length == 1 && args[0].equalsIgnoreCase("push")){
+			//FMLLog.info(main.mods + "");
+			EssentialAPI.getNotifications().push("test","test1");
 		}
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("waypoints")){

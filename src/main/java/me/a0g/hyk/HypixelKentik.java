@@ -9,10 +9,12 @@ import lombok.Setter;
 import me.a0g.hyk.chest.*;
 import me.a0g.hyk.config.HyConfig;
 import me.a0g.hyk.config.HykPos;
+import me.a0g.hyk.core.AutoUpdater;
 import me.a0g.hyk.events.*;
 import me.a0g.hyk.commands.*;
 import me.a0g.hyk.gui.EditLocationsGui;
 import me.a0g.hyk.mytests.BankHook;
+import me.a0g.hyk.mytests.DeleteHook;
 import me.a0g.hyk.mytests.DiscordRPCManager;
 import me.a0g.hyk.mytests.SwHook;
 import me.a0g.hyk.utils.*;
@@ -33,11 +35,13 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import org.apache.commons.io.FileDeleteStrategy;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Map;
@@ -46,7 +50,7 @@ import java.util.Map;
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.3";
+    public static final String VERSION = "3.0.5";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -55,7 +59,7 @@ public class HypixelKentik {
     @Setter
     private HykPos hykPos;
 
-    public final KeyBinding[] keyBindings = new KeyBinding[4];
+    public final KeyBinding[] keyBindings = new KeyBinding[5];
 
     public static int titleTimer = -1;
     public static boolean showTitle = false;
@@ -78,9 +82,13 @@ public class HypixelKentik {
 
     private final DiscordRPCManager discordRPCManager;
 
+    private final AutoUpdater autoUpdater;
+
     private NumberFormat numberFormatter;
 
     public Boolean hray = false;
+
+    public File jarFile;
 
     @Setter private  boolean isBinShow = false;
 
@@ -88,6 +96,7 @@ public class HypixelKentik {
         instance = this;
 
         utils = new Utils();
+        autoUpdater = new AutoUpdater();
         tabutil = new TabCompletionUtil();
         apiUtils = new ApiUtils();
         textUtils = new TextUtils();
@@ -101,15 +110,40 @@ public class HypixelKentik {
     public void preinit(FMLPreInitializationEvent event) {
         dir = new File(event.getModConfigurationDirectory() ,"hyk");
         dir.mkdirs();
+
+        jarFile = event.getSourceFile();
+        FMLLog.info("jarFile loc absolute: " + jarFile.getAbsolutePath());
+        FMLLog.info("jarFile loc: " + jarFile.getPath());
+
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event) throws IOException {
+    public void init(FMLInitializationEvent event) {
         hyConfig = new HyConfig(new File(dir,"hyk.toml"));
         hyConfig.preload();
 
-        enablepos();
 
+        enablepos();
+        if(!EssentialAPI.getMinecraftUtil().isDevelopment()) {
+            autoUpdater.downloadDelete();
+            MinecraftForge.EVENT_BUS.register(new AutoUpdater());
+        }else {
+            FMLLog.info("Development");
+            /*try {
+                File taskDir = new File(HypixelKentik.dir,"update");
+                taskDir.mkdir();
+
+                File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
+
+                if(!taskFile.exists()) {
+                    URL urlTask = new URL("https://raw.githubusercontent.com/a0gzy/Hyk/master/SkytilsInstaller-1.1-SNAPSHOT.jar");
+                    FileUtils.copyURLToFile(urlTask, taskFile, 1000, 1000);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+            //Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
+        }
         MinecraftForge.EVENT_BUS.register(this);
         ClientCommandHandler.instance.registerCommand(new HyK());
         ClientCommandHandler.instance.registerCommand(new GetBw());
@@ -150,6 +184,7 @@ public class HypixelKentik {
         keyBindings[1] = new KeyBinding("Delete near entities", Keyboard.KEY_K, NAME);
         keyBindings[2] = new KeyBinding("Display stats", Keyboard.KEY_J, NAME);
         keyBindings[3] = new KeyBinding("Hyk", Keyboard.KEY_H, NAME);
+        keyBindings[4] = new KeyBinding("HykX", Keyboard.KEY_X, NAME);
 
         for (KeyBinding keyBinding : keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding);
@@ -176,14 +211,16 @@ public class HypixelKentik {
        // sbe.
         //Loader.isModLoaded()
 
-        Updater.builder()
+
+       // EssentialAPI.getMinecraftUtil().isDevelopment()
+
+        /*Updater.builder()
                 .name("Hyk")
                 .currentVersion(this.VERSION)
                 .changelogUrl("https://raw.githubusercontent.com/a0gzy/Hyk/master/changelog")
                 .downloadUrl("https://github.com/a0gzy/Hyk/releases/latest")
                 .build()
-                .checkAsync();
-
+                .checkAsync();*/
 
     }
 
