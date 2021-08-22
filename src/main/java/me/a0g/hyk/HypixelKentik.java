@@ -142,7 +142,7 @@ public class HypixelKentik {
             } catch (IOException e) {
                 e.printStackTrace();
             }*/
-            //Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
+           // Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
         }
         MinecraftForge.EVENT_BUS.register(this);
         ClientCommandHandler.instance.registerCommand(new HyK());

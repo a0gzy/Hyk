@@ -5,12 +5,17 @@ import me.a0g.hyk.HypixelKentik;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.io.FileUtils;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class DeleteHook extends Thread {
 
@@ -24,10 +29,15 @@ public class DeleteHook extends Thread {
     public void run() {
         System.out.println("Deleting");
       //  try {
-            File taskDir = new File(HypixelKentik.dir,"update");
+            /*File taskDir = new File(HypixelKentik.dir,"update");
             taskDir.mkdir();
 
-            File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
+            File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");*/
+            /*Path f2 = Paths.get(this.file.getPath());
+            FileChannel ch = FileChannel.open(f2, StandardOpenOption.DELETE_ON_CLOSE);
+            ch.close();*/
+
+            File myFile = new File(HypixelKentik.dir,"FileDeleter-1.0-SNAPSHOT.jar");
 
             System.out.println("File to delete " + this.file.getAbsolutePath());
 
@@ -35,8 +45,20 @@ public class DeleteHook extends Thread {
                 System.out.println("Old file not found.");
                 return;
             }
+            System.out.println("myFile " + myFile.getAbsolutePath());
+            try {
+                if(myFile.exists()) {
+                    String cmd = "java -jar " + myFile.getAbsolutePath() + " " + this.file.getAbsolutePath();
+                    System.out.println("command " + cmd);
+                    Runtime.getRuntime().exec(cmd);
+                }
 
-            if(taskFile.exists()){
+            }catch (IOException e){
+
+            }
+
+
+            /*if(taskFile.exists()){
                 try {
                     String runtime = HypixelKentik.getInstance().getAutoUpdater().getJavaRuntime();
                     Runtime.getRuntime().exec("java -jar " + taskFile.getAbsolutePath() + " " + file.getAbsolutePath());
@@ -44,7 +66,7 @@ public class DeleteHook extends Thread {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 
            // FileUtils.forceDelete(this.file);
           //  FileUtils.forceDeleteOnExit(this.file);
