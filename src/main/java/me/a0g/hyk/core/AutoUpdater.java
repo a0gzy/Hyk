@@ -37,6 +37,8 @@ public class AutoUpdater {
     public static boolean isUpdated;
     public static boolean isUpdatedForPush;
 
+    private static String updateLog;
+
     public void downloadDelete(){
 
         Thread sd = new Thread(() -> {
@@ -60,6 +62,8 @@ public class AutoUpdater {
 
                 String updateUrl = rep.get("assets").getAsJsonArray().get(0).getAsJsonObject().get("browser_download_url").getAsString();
                 String jarName = rep.get("assets").getAsJsonArray().get(0).getAsJsonObject().get("name").getAsString();
+
+                updateLog = rep.get("body").getAsString();
 
                 File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
                 if(!taskFile.exists()){
@@ -131,8 +135,8 @@ public class AutoUpdater {
                 //EssentialAPI.getShutdownHookUtil().
 
                             EssentialAPI.getNotifications().push(
-                                    "Hyk Updated.",
-                                    "Reload your game!",
+                                    "Hyk Updated. Please reload.",
+                                    updateLog,
                                     15f
                             );
 
