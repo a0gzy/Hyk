@@ -47,16 +47,14 @@ public class AutoUpdater {
             JsonObject rep = APIHandler.getResponse("https://api.github.com/repos/a0gzy/Hyk/releases/latest");
 
             File taskDir = new File(HypixelKentik.dir,"update");
-            taskDir.mkdir();
-
+            if(!taskDir.exists()) {
+                taskDir.mkdir();
+            }
 
             //name
             String newJarVersion = rep.get("name").getAsString().replaceAll("[.]", "");
             String oldJarVersion = HypixelKentik.VERSION.replaceAll("[.]", "");
 
-          //  FMLLog.info("Versions " + newJarVersion + "  " + oldJarVersion);
-
-            //if( Integer.parseInt(newJarVersion) > Integer.parseInt(oldJarVersion) ){
             if (Integer.parseInt(newJarVersion) > Integer.parseInt(oldJarVersion)) {
                 FMLLog.info("Hyk is now updating");
 
@@ -65,7 +63,7 @@ public class AutoUpdater {
 
                 updateLog = rep.get("body").getAsString();
 
-                File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
+               /* File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
                 if(!taskFile.exists()){
                     try {
                         URL urlTask = new URL( "https://raw.githubusercontent.com/a0gzy/Hyk/master/SkytilsInstaller-1.1-SNAPSHOT.jar");
@@ -73,11 +71,19 @@ public class AutoUpdater {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }*/
+
+                File deleter = new File(taskDir,"HykFileDeleter");
+                if(!deleter.exists()){
+                    try {
+                        URL urlTask = new URL( "https://raw.githubusercontent.com/a0gzy/Hyk/master/HykFileDeleter.jar");
+                        FileUtils.copyURLToFile(urlTask, deleter, 1000, 1000);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 try {
-
-                   // FMLLog.info("Hyk is in development");
 
                     URL url = new URL(updateUrl);
                     FileUtils.copyURLToFile(url, new File(HypixelKentik.getInstance().jarFile.getParentFile(), jarName), 1000, 1000); //C:\Users\a0g\Desktop\Hyk\build\classes\java\main
@@ -85,9 +91,6 @@ public class AutoUpdater {
 
                     isUpdated = true;
                     isUpdatedForPush = true;
-                  //  FMLLog.info(isUpdated + " AYE " + isUpdatedForPush);
-                    //System.out.println(isUpdated  + " " + isUpdatedForPush);
-
 
                     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                         File oldJar = HypixelKentik.getInstance().getJarFile();
@@ -101,14 +104,22 @@ public class AutoUpdater {
                             return;
                         }
 
-                        if(taskFile.exists()){
+                        if(deleter.exists()){
                             try {
-                                String runtime = getJavaRuntime();
-                                Runtime.getRuntime().exec("java -jar " + taskFile.getAbsolutePath() + " " + oldJar.getAbsolutePath() +"");
+                              //  String runtime = getJavaRuntime();
+                                Runtime.getRuntime().exec("java -jar " + deleter.getAbsolutePath() + " " + oldJar.getAbsolutePath() );
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }else {
+                            try {
+                                Desktop.getDesktop().open(oldJar.getParentFile());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         }
+
+
 
                     }));
                 } catch (IOException e) {
@@ -124,23 +135,14 @@ public class AutoUpdater {
 
     @SubscribeEvent
     public void onGuiOpen(GuiScreenEvent.DrawScreenEvent.Post e) {
-        /*if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            new TextRenderer(Minecraft.getMinecraft(), e.gui.toString(), 10, 10, 1, Color.ORANGE.getRGB(), true);
-        }*/
         if (e.gui instanceof GuiMainMenu) {
-           // FMLLog.info("GDE " + isUpdatedForPush + " " + isUpdated);
             if (isUpdatedForPush) {
-                FMLLog.info("GDE PUSH");
-              //  Multithreading.runAsync(() -> {
-                //EssentialAPI.getShutdownHookUtil().
 
-                            EssentialAPI.getNotifications().push(
-                                    "Hyk Updated. Please reload.",
-                                    updateLog,
-                                    15f
-                            );
-
-               // });
+                EssentialAPI.getNotifications().push(
+                        "Hyk Updated. Please reload.",
+                        updateLog,
+                        15f
+                );
 
                 isUpdatedForPush = false;
             }

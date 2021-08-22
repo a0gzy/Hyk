@@ -31,11 +31,8 @@ public class DeleteHook extends Thread {
       //  try {
             /*File taskDir = new File(HypixelKentik.dir,"update");
             taskDir.mkdir();
-
             File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");*/
-            /*Path f2 = Paths.get(this.file.getPath());
-            FileChannel ch = FileChannel.open(f2, StandardOpenOption.DELETE_ON_CLOSE);
-            ch.close();*/
+
 
             File myFile = new File(HypixelKentik.dir,"FileDeleter-1.0-SNAPSHOT.jar");
 

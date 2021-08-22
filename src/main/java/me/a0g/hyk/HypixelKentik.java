@@ -50,7 +50,7 @@ import java.util.Map;
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.5";
+    public static final String VERSION = "3.0.6";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -129,19 +129,6 @@ public class HypixelKentik {
             MinecraftForge.EVENT_BUS.register(new AutoUpdater());
         }else {
             FMLLog.info("Development");
-            /*try {
-                File taskDir = new File(HypixelKentik.dir,"update");
-                taskDir.mkdir();
-
-                File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
-
-                if(!taskFile.exists()) {
-                    URL urlTask = new URL("https://raw.githubusercontent.com/a0gzy/Hyk/master/SkytilsInstaller-1.1-SNAPSHOT.jar");
-                    FileUtils.copyURLToFile(urlTask, taskFile, 1000, 1000);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
            // Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
         }
         MinecraftForge.EVENT_BUS.register(this);
