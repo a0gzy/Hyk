@@ -50,7 +50,7 @@ import java.util.Map;
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.6";
+    public static final String VERSION = "3.0.7";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
