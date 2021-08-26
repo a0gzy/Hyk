@@ -360,7 +360,7 @@ public class Utils {
 
     public void setRPCGame() {
         Minecraft mc = Minecraft.getMinecraft();
-        if (mc != null && mc.theWorld != null && !mc.isSingleplayer() && main.getDiscordRPCManager() != null) {
+        if (mc != null && mc.theWorld != null && !mc.isSingleplayer() && main.getDiscordRPCManager(). != null) {
            // mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()).getResponseTime();
             main.getDiscordRPCManager().details =  mc.thePlayer.getName() + " -> " + mc.getCurrentServerData().serverIP;
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);

@@ -28,6 +28,14 @@ public class HyConfig extends Vigilant {
         GuiUtil.open(Objects.requireNonNull(new EditLocationsGui()));
     }
 
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "AutoUpdate",
+            category = "General",
+            description = "Auto update the mod when new version released."
+    )
+    private boolean autoUpdate = true;
+
 
 
 

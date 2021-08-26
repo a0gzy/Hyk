@@ -124,7 +124,7 @@ public class HypixelKentik {
 
 
         enablepos();
-        if(!EssentialAPI.getMinecraftUtil().isDevelopment()) {
+        if(!EssentialAPI.getMinecraftUtil().isDevelopment() && hyConfig.isAutoUpdate()) {
             autoUpdater.downloadDelete();
             MinecraftForge.EVENT_BUS.register(new AutoUpdater());
         }else {

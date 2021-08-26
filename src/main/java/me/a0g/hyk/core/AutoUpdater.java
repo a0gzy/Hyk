@@ -63,6 +63,11 @@ public class AutoUpdater {
 
                 updateLog = rep.get("body").getAsString();
 
+                if(updateUrl.isEmpty()) {
+                    FMLLog.info("updateUrl broken");
+                    return;
+                }
+
                /* File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");
                 if(!taskFile.exists()){
                     try {
@@ -73,7 +78,7 @@ public class AutoUpdater {
                     }
                 }*/
 
-                File deleter = new File(taskDir,"HykFileDeleter");
+                File deleter = new File(taskDir,"HykFileDeleter.jar");
                 if(!deleter.exists()){
                     try {
                         URL urlTask = new URL( "https://raw.githubusercontent.com/a0gzy/Hyk/master/HykFileDeleter.jar");

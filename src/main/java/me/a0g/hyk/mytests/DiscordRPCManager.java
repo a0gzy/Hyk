@@ -56,7 +56,7 @@ public class DiscordRPCManager implements IPCListener {
                         .setDetails(details)
                         .setState(state)
                         .setStartTimestamp(startTimestamp)
-                        .setLargeImage("rpc","Hyk 2.0 by a0g#1387")
+                        .setLargeImage("rpc","Hyk " + HypixelKentik.VERSION + " by a0g#1387")
                         .build();
                 client.sendRichPresence(presence);
 
@@ -82,29 +82,25 @@ public class DiscordRPCManager implements IPCListener {
 
     public void updatePresence2() {
         //presence.endTimestamp   =  System.currentTimeMillis() / 1000 - presence.startTimestamp;
-       // if(isActive()) {
-        if(smallImageKey != "") {
-            RichPresence presence = new RichPresence.Builder()
-                    .setDetails(details)
-                    .setState(state)
-                    .setLargeImage("rpc", "Hyk 2.0 by a0g#1387")
-                    .setSmallImage(smallImageKey, smallImageText)
-                    .setStartTimestamp(startTimestamp)
-                    .build();
-            client.sendRichPresence(presence);
-        }
-        /*else if(Minecraft.getMinecraft() == null){
-           stop2();
-        }*/
-        else
-        {
-            RichPresence presence = new RichPresence.Builder()
-                    .setDetails(details)
-                    .setState(state)
-                    .setLargeImage("rpc", "Hyk 2.0 by a0g#1387")
-                    .setStartTimestamp(startTimestamp)
-                    .build();
-            client.sendRichPresence(presence);
+        if(isActive()) {
+            if (smallImageKey != "") {
+                RichPresence presence = new RichPresence.Builder()
+                        .setDetails(details)
+                        .setState(state)
+                        .setLargeImage("rpc", "Hyk " + HypixelKentik.VERSION + " by a0g#1387")
+                        .setSmallImage(smallImageKey, smallImageText)
+                        .setStartTimestamp(startTimestamp)
+                        .build();
+                client.sendRichPresence(presence);
+            } else {
+                RichPresence presence = new RichPresence.Builder()
+                        .setDetails(details)
+                        .setState(state)
+                        .setLargeImage("rpc", "Hyk " + HypixelKentik.VERSION + " by a0g#1387")
+                        .setStartTimestamp(startTimestamp)
+                        .build();
+                client.sendRichPresence(presence);
+            }
         }
 
         //}
