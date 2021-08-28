@@ -93,7 +93,7 @@ public class Cakes {
                            FMLLog.info("executed ");
                            oneWord = false;
                        }
-                    }else if(bbh.getWords().size() <= 6){
+                    }else if(bbh.getWords().size() <= 6 && bbh.getWords().size() >0 ){
                         if(sixWords) {
                             main.getUtils().sendMessage("§7" + main.getInGameBbhWords() + "");
                             sixWords = false;
