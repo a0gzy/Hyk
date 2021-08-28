@@ -368,6 +368,15 @@ public class HyConfig extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
+            name = "BuildBattle",
+            category = "Private",
+            subcategory = "General",
+            description = "Guess the build words /hyk bbh."
+    )
+    private boolean bbh = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
             name = "ChestSp",
             category = "Private",
             subcategory = "General",

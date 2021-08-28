@@ -1,9 +1,14 @@
 package me.a0g.hyk.events;
 
+import gg.essential.api.utils.mojang.TextureURL;
 import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.core.features.BuildBattleHelper;
+import me.a0g.hyk.utils.ColorUtils;
+import me.a0g.hyk.utils.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -12,10 +17,14 @@ import org.lwjgl.input.Mouse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Cakes {
 
     private final HypixelKentik main = HypixelKentik.getInstance();
+
+    private static final Pattern BBH = Pattern.compile("The theme is (.+)");
 
     public static double newUse;
 
@@ -25,6 +34,9 @@ public class Cakes {
 
     private boolean wasfarmed = false;
     private long farmLastPressed;
+
+    private boolean oneWord = false;
+    private boolean sixWords = false;
 
     private int getFarmingPer5(String text) {
 
@@ -51,9 +63,62 @@ public class Cakes {
 
         //actionbar
         if(event.type == 2){
+            //if(main.getUtils().checkForGame("BUILD BATTLE")) {
+
+            //bbh
+            if(main.getUtils().checkForGame("GUESS THE BUILD") && main.getHyConfig().isBbh()) {
+
+                String clearedTheme = TextUtils.stripColor(unformattedText);
+               // FMLLog.info("GTD " + event.message.getUnformattedText());
+
+                Matcher matcher = BBH.matcher(clearedTheme);
+                if (matcher.matches()) {
+                    String theme = matcher.group(1);
+                   // FMLLog.info(theme);
+                    /*if(!theme.contains("_") && !main.getBbhWords().contains(theme)){
+                        main.getUtils().sendMessage("New world added: " + theme.toLowerCase());
+                        main.getBbhWords().add(theme.toLowerCase());
+                    }*/
+                    BuildBattleHelper bbh = new BuildBattleHelper(theme);
+                    main.getInGameBbhWords().addAll(bbh.getWords());
+
+                   // FMLLog.info(oneWord + " is " + bbh.getWords().size());
+                    if(bbh.getWords().size() == 1){
+
+                       //if( oneWord && ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer,"/ac " + bbh.getWords().get(0) ) != 0){
+                       if( oneWord ){
+                           main.getUtils().sendMessage("Theme is: " + bbh.getWords().get(0));
+
+                           Minecraft.getMinecraft().thePlayer.sendChatMessage("/ac " + bbh.getWords().get(0));
+                           FMLLog.info("executed ");
+                           oneWord = false;
+                       }
+                    }else if(bbh.getWords().size() <= 6){
+                        if(sixWords) {
+                            main.getUtils().sendMessage("§7" + main.getInGameBbhWords() + "");
+                            sixWords = false;
+                        }
+                    }
+                }else {
+                  //  FMLLog.info("ne mathces ????" + clearedTheme);
+                }
+            }
+
+
             //if(unformattedText.contains("Farming")){
                 Render.farmclicks = getFarmingPer5(unformattedText);
            // }
+        }
+
+        if(unformattedText.contains("Round: ") && main.getUtils().checkForGame("GUESS THE BUILD")){
+            oneWord = true;
+            sixWords = true;
+            main.getInGameBbhWords().clear();
+        }
+        if(unformattedText.contains("(Correct Guess)") && main.getUtils().checkForGame("GUESS THE BUILD")){
+            oneWord = false;
+
+            main.getInGameBbhWords().clear();
         }
 
         //Your new API key is

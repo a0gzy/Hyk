@@ -42,7 +42,13 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -50,7 +56,7 @@ import java.util.Map;
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.7";
+    public static final String VERSION = "3.0.8";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -92,6 +98,12 @@ public class HypixelKentik {
 
     @Setter private  boolean isBinShow = false;
 
+    @Getter
+    private List<String> bbhWords = new ArrayList<>();
+
+    @Getter
+    private List<String> inGameBbhWords = new ArrayList<>();
+
     public HypixelKentik() {
         instance = this;
 
@@ -124,6 +136,20 @@ public class HypixelKentik {
 
 
         enablepos();
+
+        File bbh = new File(dir,"bbh");
+        initBbh(bbh);
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(() -> {
+                    try {
+                        Files.write(bbh.toPath(),this.bbhWords,StandardCharsets.UTF_8,new OpenOption[] { StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+        ));
+
+
         if(!EssentialAPI.getMinecraftUtil().isDevelopment() && hyConfig.isAutoUpdate()) {
             autoUpdater.downloadDelete();
             MinecraftForge.EVENT_BUS.register(new AutoUpdater());
@@ -209,6 +235,43 @@ public class HypixelKentik {
                 .build()
                 .checkAsync();*/
 
+    }
+
+    public void initBbh( File bbh){
+        if(bbh.exists()){
+            new Thread(() -> {
+                try {
+                    //bbhWords = new ArrayList<>();
+                    List<String> lines = Files.readAllLines(bbh.toPath(),StandardCharsets.UTF_8);
+                    bbhWords.addAll(lines);
+                   // FMLLog.info(lines + "");
+                    //lines.stream().distinct().forEach();
+                   /* for(String line : lines){
+                        if(line != null && !line.isEmpty()){
+                            bbhWords.add(line);
+                        }
+                    }*/
+                   // this.bbhWords.addAll(lines);
+                    // Files.readAllLines(bbh.toPath(), StandardCharsets.UTF_8).stream().distinct().forEach(bbhWords::add);
+                } catch (IOException e) {
+                   // System.err.println(e);
+                    e.printStackTrace();
+                }
+            }).start();
+        }else {
+            new Thread(() -> {
+                try {
+                    URL urlTask = new URL("https://raw.githubusercontent.com/a0gzy/Hyk/master/bbh");
+                    FileUtils.copyURLToFile(urlTask, bbh, 1000, 1000);
+
+                    Thread.sleep(4000);
+                    initBbh(bbh);
+
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 
 

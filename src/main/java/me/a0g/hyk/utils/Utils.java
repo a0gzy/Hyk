@@ -349,6 +349,7 @@ public class Utils {
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);
             if (scoreboardObj != null) {
                 String scObjName = ScoreboardHandler.cleanSB(scoreboardObj.getDisplayName());
+                //FMLLog.info(scObjName);
                 if (scObjName.contains(minigame)) {
                     //inSkyblock = true;
                     return true;
@@ -360,7 +361,7 @@ public class Utils {
 
     public void setRPCGame() {
         Minecraft mc = Minecraft.getMinecraft();
-        if (mc != null && mc.theWorld != null && !mc.isSingleplayer() && main.getDiscordRPCManager() != null) {
+        if (mc != null && mc.theWorld != null && !mc.isSingleplayer() && main.getDiscordRPCManager() != null && mc.getCurrentServerData() != null) {
            // mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID()).getResponseTime();
             main.getDiscordRPCManager().details =  mc.thePlayer.getName() + " -> " + mc.getCurrentServerData().serverIP;
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);

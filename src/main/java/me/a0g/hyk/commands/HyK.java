@@ -20,6 +20,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.FMLLog;
 
+import java.io.File;
 import java.util.*;
 
 public class HyK extends CommandBase{
@@ -152,6 +153,18 @@ public class HyK extends CommandBase{
 		else if(args.length == 1 && args[0].equalsIgnoreCase("getMods")){
 			//FMLLog.info(main.mods + "");
 			main.getUtils().sendMessage(main.mods + "");
+		}
+
+		else if(args.length == 1 && args[0].equalsIgnoreCase("bbh")){
+			//FMLLog.info(main.mods + "");
+			main.getUtils().sendMessage("§7" + main.getInGameBbhWords() + "");
+		}
+
+		else if(args.length == 2 && args[0].equalsIgnoreCase("bbh")){
+			//FMLLog.info(main.mods + "");
+			//main.initBbh(new File(main.dir,"bbh"));
+
+			main.getUtils().sendMessage("§7" + main.getBbhWords() + "");
 		}
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("push")){
