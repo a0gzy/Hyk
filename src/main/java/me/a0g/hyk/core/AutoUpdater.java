@@ -11,6 +11,7 @@ import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.handlers.APIHandler;
 import me.a0g.hyk.mytests.DeleteHook;
 import me.a0g.hyk.utils.ApiUtils;
+import me.a0g.hyk.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -111,8 +112,12 @@ public class AutoUpdater {
 
                         if(deleter.exists()){
                             try {
-                              //  String runtime = getJavaRuntime();
-                                Runtime.getRuntime().exec("java -jar " + deleter.getAbsolutePath() + " " + oldJar.getAbsolutePath() );
+                                //String runtime = getJavaRuntime();
+                                String runtime = Utils.getJavaRuntime();
+                               // Runtime.getRuntime().exec("java -jar " + deleter.getAbsolutePath() + " " + oldJar.getAbsolutePath() );
+                                String cmd = String.format("\"%s\" -jar \"%s\" \"%s\"", runtime , deleter.getAbsolutePath() , oldJar.getAbsolutePath());
+                                Runtime.getRuntime().exec(cmd);
+                              //  Runtime.getRuntime().exec(runtime + " -jar " + deleter.getAbsolutePath() + " " + oldJar.getAbsolutePath() );
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -154,7 +159,7 @@ public class AutoUpdater {
         }
     }
 
-    public String getJavaRuntime() throws IOException {
+    /*public String getJavaRuntime() throws IOException {
         String os = System.getProperty("os.name");
         String java = System.getProperty("java.home") + File.separator + "bin" + File.separator +
                 (os != null && os.toLowerCase(Locale.ENGLISH).startsWith("windows") ? "java.exe" : "java");
@@ -162,7 +167,5 @@ public class AutoUpdater {
             throw new IOException("Unable to find suitable java runtime at "+java);
         }
         return java;
-    }
-
-
+    }*/
 }

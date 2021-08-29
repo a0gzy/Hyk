@@ -40,8 +40,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -431,6 +434,16 @@ public class Utils {
         }
 
         return capitalized;
+    }
+
+    public static String getJavaRuntime() throws IOException {
+        String os = System.getProperty("os.name");
+        String java = System.getProperty("java.home") + File.separator + "bin" + File.separator +
+                (os != null && os.toLowerCase(Locale.ENGLISH).startsWith("windows") ? "java.exe" : "java");
+        if (!new File(java).isFile()) {
+            throw new IOException("Unable to find suitable java runtime at "+java);
+        }
+        return java;
     }
 
     public boolean checkForIsland() {

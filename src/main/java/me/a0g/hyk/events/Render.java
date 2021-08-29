@@ -342,7 +342,7 @@ public class Render {
 	@SubscribeEvent
 	public void onGuiDraw(GuiScreenEvent.DrawScreenEvent.Post event) {
 
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && main.isDev) {
 			new TextRenderer(Minecraft.getMinecraft(), event.gui.toString(), 10, 10, 1, Color.ORANGE.getRGB(), true);
 		}
 

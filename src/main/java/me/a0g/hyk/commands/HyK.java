@@ -199,12 +199,20 @@ public class HyK extends CommandBase{
 
 		}
 
+		else if(args.length == 1 && args[0].equalsIgnoreCase("dev")){
+
+			main.isDev = !main.isDev;
+
+		}
+
 		else if(args.length == 1 && args[0].equalsIgnoreCase("game")){
 
 			main.getUtils().sendMessage("Example: /play arcade_party_games_1");
 			main.getUtils().sendMessage("Command: " + Cakes.gamemsg);
 
 		}
+
+
 
 		else if(args.length == 2 && args[0].equalsIgnoreCase("game")){
 

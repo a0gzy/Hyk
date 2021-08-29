@@ -2,6 +2,7 @@ package me.a0g.hyk.mytests;
 
 import javafx.application.Application;
 import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.utils.Utils;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.io.FileUtils;
 
@@ -21,20 +22,19 @@ public class DeleteHook extends Thread {
 
     private File file;
 
-    public DeleteHook(File file){
+    public DeleteHook(File file) {
         this.file = file;
     }
 
     @Override
     public void run() {
-        System.out.println("Deleting");
-      //  try {
-            /*File taskDir = new File(HypixelKentik.dir,"update");
-            taskDir.mkdir();
-            File taskFile = new File(taskDir,"SkytilsInstaller-1.1-SNAPSHOT.jar");*/
+        try {
+            System.out.println("Deleting");
+            String java = Utils.getJavaRuntime();
+            System.out.println(java);
 
-
-            File myFile = new File(HypixelKentik.dir,"FileDeleter-1.0-SNAPSHOT.jar");
+            File taskDir = new File(HypixelKentik.dir, "update");
+            File myFile = new File(taskDir, "HykFileDeleter.jar");
 
             System.out.println("File to delete " + this.file.getAbsolutePath());
 
@@ -43,33 +43,20 @@ public class DeleteHook extends Thread {
                 return;
             }
             System.out.println("myFile " + myFile.getAbsolutePath());
-            try {
-                if(myFile.exists()) {
-                    String cmd = "java -jar " + myFile.getAbsolutePath() + " " + this.file.getAbsolutePath();
-                    System.out.println("command " + cmd);
-                    Runtime.getRuntime().exec(cmd);
-                }
-
-            }catch (IOException e){
-
+            if (myFile.exists()) {
+                System.out.println("Exists");
+                String cmd = String.format("\"%s\" -jar \"%s\" \"%s\"", java , myFile.getAbsolutePath() , this.file.getAbsolutePath());
+             //   String cmd = String.format("\"%s\"", java) + " -jar " + myFile.getAbsolutePath() + " " + this.file.getAbsolutePath();
+                //  String cmd = "java.exe -jar " + myFile.getAbsolutePath() + " " + this.file.getAbsolutePath();
+                System.out.println("command " + cmd);
+                Runtime.getRuntime().exec(cmd);
+            } else {
+                System.out.println("Ne exists");
             }
 
-
-            /*if(taskFile.exists()){
-                try {
-                    String runtime = HypixelKentik.getInstance().getAutoUpdater().getJavaRuntime();
-                    Runtime.getRuntime().exec("java -jar " + taskFile.getAbsolutePath() + " " + file.getAbsolutePath());
-                  //  System.out.println("Task." + runtime);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }*/
-
-           // FileUtils.forceDelete(this.file);
-          //  FileUtils.forceDeleteOnExit(this.file);
-       // }catch (IOException e){
-      //      System.err.println(e);
-       // }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

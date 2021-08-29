@@ -56,7 +56,7 @@ import java.util.Map;
 @Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
 public class HypixelKentik {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.8";
+    public static final String VERSION = "3.0.9";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -95,6 +95,8 @@ public class HypixelKentik {
     public Boolean hray = false;
 
     public File jarFile;
+
+    public boolean isDev = false;
 
     @Setter private  boolean isBinShow = false;
 
@@ -155,7 +157,7 @@ public class HypixelKentik {
             MinecraftForge.EVENT_BUS.register(new AutoUpdater());
         }else {
             FMLLog.info("Development");
-           // Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
+            Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
         }
         MinecraftForge.EVENT_BUS.register(this);
         ClientCommandHandler.instance.registerCommand(new HyK());

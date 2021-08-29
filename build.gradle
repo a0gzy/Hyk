@@ -4,7 +4,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "6f53277"
 }
 
-version = "3.0.8"
+version = "3.0.9"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
