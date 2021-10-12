@@ -27,7 +27,7 @@ public class DiscordRPCManager implements IPCListener {
     public String smallImageKey = "";
     public String smallImageText = "";
 
-    private static final long APPLICATION_ID = 862685928195096617L;
+    private static final long APPLICATION_ID = 897551440229335071;
     private static final long UPDATE_PERIOD = 10L;
     private Timer updateTimer;
 
