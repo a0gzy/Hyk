@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.commands.HyK;
-import me.a0g.hyk.config.HyConfig;
 import me.a0g.hyk.core.Feature;
 import me.a0g.hyk.gui.EditLocationsGui;
-import me.a0g.hyk.utils.TextUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -19,10 +17,6 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
@@ -41,7 +35,7 @@ import org.lwjgl.input.Mouse;
 
 public class Render {
 
-	private final HypixelKentik main = HypixelKentik.getInstance();
+	private final Hyk main = Hyk.getInstance();
 	private FontRenderer rendererer = Minecraft.getMinecraft().fontRendererObj;
 	private Minecraft mc = Minecraft.getMinecraft();
 	public static final ResourceLocation CAKE_ICON = new ResourceLocation("hyk", "cake.png");
@@ -76,7 +70,15 @@ public class Render {
 				feature.draw(mc);
 			}
 
+			//DrawUtils.drawRect(200,200,80,50,0xA4000000,10);
+
+			//new TextRenderer(mc,TooltipListener.hitReach,40,50,1);
+
 			//renderAll();
+
+			if(EventKey.shifting){
+				new TextRenderer(mc,"§bShifting",250,60,1);
+			}
 
 			if(farmclicksrender) {
 				new TextRenderer(mc, "§aSkill/s§r: " + farmclicks, 140, 18, 1);
@@ -167,7 +169,12 @@ public class Render {
 
 			}
 
-			KeyBinding.setKeyBindState(getKeyCodeSprint(), main.getHyConfig().isAutoSprintEnabled());
+			if(main.getHyConfig().isAutoSprintEnabled()) {
+				KeyBinding.setKeyBindState(getKeyCodeSprint(), main.getHyConfig().isAutoSprintEnabled());
+			}
+			if(EventKey.shifting){
+				KeyBinding.setKeyBindState( Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode() , EventKey.shifting );
+			}
 	    }
 	}
 

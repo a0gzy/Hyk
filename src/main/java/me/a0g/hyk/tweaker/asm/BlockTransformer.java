@@ -1,17 +1,20 @@
 package me.a0g.hyk.tweaker.asm;
 
-import me.a0g.hyk.tweaker.asm.utils.InjectionHelper;
-import me.a0g.hyk.tweaker.asm.utils.InstructionBuilder;
-import me.a0g.hyk.tweaker.asm.utils.TransformerClass;
-import me.a0g.hyk.tweaker.asm.utils.TransformerMethod;
+import me.a0g.hyk.tweaker.asm.utils.*;
 import me.a0g.hyk.tweaker.transformer.ITransformer;
 import net.minecraftforge.fml.common.FMLLog;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
 import java.util.Iterator;
 
 public class BlockTransformer implements ITransformer {
+
+    /**
+     * {@link net.minecraft.block.Block}
+     */
+
     @Override
     public String[] getClassName() {
         return new String[]{"net.minecraft.block.Block"};
@@ -84,7 +87,7 @@ public class BlockTransformer implements ITransformer {
 
         list.add(new VarInsnNode(Opcodes.ALOAD, 4));
         list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "me/a0g/hyk/tweaker/asm/utils/ReturnValue", "isCancelled",
-                "()Z", false));
+                "()Z", false)); // Owner mozhno tak zhe Type.getInternalName(ReturnValue.class)
         LabelNode notCancelled = new LabelNode(); // if (returnValue.isCancelled())
         list.add(new JumpInsnNode(Opcodes.IFEQ, notCancelled));
 
@@ -95,7 +98,7 @@ public class BlockTransformer implements ITransformer {
         list.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, "java/lang/Boolean", "booleanValue",
                 "()Z", false));
         list.add(new InsnNode(Opcodes.IRETURN)); // return returnValue.getValue();
-        list.add(notCancelled);
+        list.add(notCancelled);  //}
 
 
         return list;

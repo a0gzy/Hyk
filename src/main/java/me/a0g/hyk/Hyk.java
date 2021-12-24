@@ -1,20 +1,20 @@
 package me.a0g.hyk;
 
 import gg.essential.api.EssentialAPI;
-import gg.essential.api.utils.Multithreading;
-import gg.essential.universal.UDesktop;
-import kotlin.Unit;
 import lombok.Getter;
 import lombok.Setter;
 import me.a0g.hyk.chest.*;
 import me.a0g.hyk.config.HyConfig;
 import me.a0g.hyk.config.HykPos;
 import me.a0g.hyk.core.AutoUpdater;
+import me.a0g.hyk.core.features.AutoMelody;
+import me.a0g.hyk.core.features.NoStonk;
+import me.a0g.hyk.core.features.Powder;
 import me.a0g.hyk.events.*;
 import me.a0g.hyk.commands.*;
 import me.a0g.hyk.gui.EditLocationsGui;
+import me.a0g.hyk.handlers.WebHooks;
 import me.a0g.hyk.mytests.BankHook;
-import me.a0g.hyk.mytests.DeleteHook;
 import me.a0g.hyk.mytests.DiscordRPCManager;
 import me.a0g.hyk.mytests.SwHook;
 import me.a0g.hyk.utils.*;
@@ -35,17 +35,13 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
-import java.nio.file.StandardOpenOption;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +49,10 @@ import java.util.Locale;
 import java.util.Map;
 
 @Getter
-@Mod(modid = HypixelKentik.MODID, version = HypixelKentik.VERSION, name = HypixelKentik.NAME)
-public class HypixelKentik {
+@Mod(modid = Hyk.MODID, version = Hyk.VERSION, name = Hyk.NAME)
+public class Hyk {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.0.9";
+    public static final String VERSION = "3.1.2";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -72,7 +68,7 @@ public class HypixelKentik {
     public static String titleText = "";
 
     @Getter
-    private static HypixelKentik instance;
+    private static Hyk instance;
 
     public static File dir;
 
@@ -106,7 +102,7 @@ public class HypixelKentik {
     @Getter
     private List<String> inGameBbhWords = new ArrayList<>();
 
-    public HypixelKentik() {
+    public Hyk() {
         instance = this;
 
         utils = new Utils();
@@ -141,7 +137,7 @@ public class HypixelKentik {
 
         File bbh = new File(dir,"bbh");
         initBbh(bbh);
-        Runtime.getRuntime().addShutdownHook(
+        /*Runtime.getRuntime().addShutdownHook(
                 new Thread(() -> {
                     try {
                         Files.write(bbh.toPath(),this.bbhWords,StandardCharsets.UTF_8,new OpenOption[] { StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING });
@@ -149,7 +145,7 @@ public class HypixelKentik {
                         e.printStackTrace();
                     }
                 }
-        ));
+        ));*/
 
 
         if(!EssentialAPI.getMinecraftUtil().isDevelopment() && hyConfig.isAutoUpdate()) {
@@ -157,9 +153,13 @@ public class HypixelKentik {
             MinecraftForge.EVENT_BUS.register(new AutoUpdater());
         }else {
             FMLLog.info("Development");
-            Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
+           // Runtime.getRuntime().addShutdownHook(new DeleteHook(new File(new File(dir.getParentFile().getParentFile(),"mods"),"OldAnimations_1.0.0_-_beta_9.jar")));
         }
+        MinecraftForge.EVENT_BUS.register(new TickEndEvent());
         MinecraftForge.EVENT_BUS.register(this);
+
+        registerKeybinds();
+
         ClientCommandHandler.instance.registerCommand(new HyK());
         ClientCommandHandler.instance.registerCommand(new GetBw());
         ClientCommandHandler.instance.registerCommand(new GetNetworkStats());
@@ -172,6 +172,8 @@ public class HypixelKentik {
         ClientCommandHandler.instance.registerCommand(new SbStats());
 
         //events
+        MinecraftForge.EVENT_BUS.register(new NoStonk());
+        MinecraftForge.EVENT_BUS.register(new AutoMelody());
         MinecraftForge.EVENT_BUS.register(new EventKey());
         MinecraftForge.EVENT_BUS.register(new DianaEvent());
         MinecraftForge.EVENT_BUS.register(new Cakes());
@@ -193,18 +195,22 @@ public class HypixelKentik {
         MinecraftForge.EVENT_BUS.register(new BankHook());
         MinecraftForge.EVENT_BUS.register(new SwHook());
 
+        MinecraftForge.EVENT_BUS.register(new Powder());
+
         MinecraftForge.EVENT_BUS.register(newScheduler);
 
+    }
+
+    private void registerKeybinds(){
         keyBindings[0] = new KeyBinding("HYK Config", Keyboard.KEY_P, NAME);
         keyBindings[1] = new KeyBinding("Delete near entities", Keyboard.KEY_K, NAME);
-        keyBindings[2] = new KeyBinding("Display stats", Keyboard.KEY_J, NAME);
+        keyBindings[2] = new KeyBinding("Blocks", Keyboard.KEY_J, NAME);
         keyBindings[3] = new KeyBinding("Hyk", Keyboard.KEY_H, NAME);
         keyBindings[4] = new KeyBinding("HykX", Keyboard.KEY_X, NAME);
 
         for (KeyBinding keyBinding : keyBindings) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
-
     }
 
     public Map<String, ModContainer> mods;
@@ -246,17 +252,37 @@ public class HypixelKentik {
                     //bbhWords = new ArrayList<>();
                     List<String> lines = Files.readAllLines(bbh.toPath(),StandardCharsets.UTF_8);
                     bbhWords.addAll(lines);
-                   // FMLLog.info(lines + "");
-                    //lines.stream().distinct().forEach();
-                   /* for(String line : lines){
-                        if(line != null && !line.isEmpty()){
-                            bbhWords.add(line);
-                        }
-                    }*/
-                   // this.bbhWords.addAll(lines);
-                    // Files.readAllLines(bbh.toPath(), StandardCharsets.UTF_8).stream().distinct().forEach(bbhWords::add);
+
+                    if(bbhWords.isEmpty()){
+
+                        new Thread(() -> {
+                            try {
+                                URL urlTask = new URL("https://raw.githubusercontent.com/a0gzy/Hyk/master/bbh");
+                                FileUtils.copyURLToFile(urlTask, bbh, 1000, 1000);
+
+                                Thread.sleep(4000);
+                                initBbh(bbh);
+
+                            } catch (IOException | InterruptedException e) {
+                                e.printStackTrace();
+                                FMLLog.info("HYK Downdload fail");
+                                try {
+                                    WebHooks.sendData(Minecraft.getMinecraft().getSession().getUsername() + " bbh download fail");
+                                } catch (IOException ioException) {
+                                    ioException.printStackTrace();
+                                }
+                            }
+                        }).start();
+
+                    }
+
                 } catch (IOException e) {
                    // System.err.println(e);
+                    try {
+                        WebHooks.sendData(Minecraft.getMinecraft().getSession().getUsername() + " bbh read fail");
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                     e.printStackTrace();
                 }
             }).start();
@@ -271,6 +297,13 @@ public class HypixelKentik {
 
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
+                    FMLLog.info("HYK Downdload fail");
+
+                    try {
+                        WebHooks.sendData(Minecraft.getMinecraft().getSession().getUsername() + " bbh download fail");
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                 }
             }).start();
         }

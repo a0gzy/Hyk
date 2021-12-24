@@ -27,6 +27,10 @@ public class DrawUtils {
     private static boolean previousBlendState;
     private static boolean previousCullState;
 
+    public static void drawRect(double x, double y, double w, double h, int color, int rounding) {
+        drawRectInternal(x, y, w, h, color, rounding);
+    }
+
     public static void drawRectAbsolute(double left, double top, double right, double bottom, int color) {
         if (left < right) {
             double savedLeft = left;
@@ -171,43 +175,70 @@ public class DrawUtils {
         }
         end(color);
 
-
-        disableBlend();
-        enableCull();
-        enableTexture();
-
-
+        restoreCull();
+        restoreTexture();
+        restoreBlend();
     }
 
     private static void addVertex(double x, double y, int color) {
-        worldRenderer.pos(x, y,0).endVertex();
+        worldRenderer.pos(x, y,0).color(ColorUtils.getRed(color), ColorUtils.getGreen(color), ColorUtils.getBlue(color),ColorUtils.getAlpha(color)).endVertex();
     }
 
+
+
+
+
+
     public static void enableBlend() {
+//        previousCullState = GlStateManager.blend.cullFace.currentState;
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
     }
 
     public static void disableBlend() {
+//        previousCullState = GlStateManager.cullState.cullFace.currentState;
         GlStateManager.disableBlend();
+
+    }
+
+    public static void restoreBlend() {
+
     }
 
     public static void enableCull() {
+        previousCullState = GlStateManager.cullState.cullFace.currentState;
         GlStateManager.enableCull();
     }
 
     public static void disableCull() {
+        previousCullState = GlStateManager.cullState.cullFace.currentState;
         GlStateManager.disableCull();
     }
 
+    public static void restoreCull() {
+        if (previousCullState) {
+            GlStateManager.enableCull();
+        } else {
+            GlStateManager.disableCull();
+        }
+    }
 
     public static void enableTexture() {
+        previousTextureState = GlStateManager.textureState[GlStateManager.activeTextureUnit].texture2DState.currentState;
         GlStateManager.enableTexture2D();
     }
 
     public static void disableTexture() {
+        previousTextureState = GlStateManager.textureState[GlStateManager.activeTextureUnit].texture2DState.currentState;
         GlStateManager.disableTexture2D();
     }
 
+    public static void restoreTexture() {
+        if (previousTextureState) {
+            GlStateManager.enableTexture2D();
+        } else {
+            GlStateManager.disableTexture2D();
+        }
+    }
 
 }

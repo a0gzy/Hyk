@@ -1,6 +1,6 @@
 package me.a0g.hyk.utils;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class NewScheduler {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private final Object anchor = new Object();
     private volatile long totalTicks = 0;

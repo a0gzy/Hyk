@@ -1,22 +1,19 @@
 package me.a0g.hyk.commands;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.utils.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.List;
 
 public class SlotNbt extends CommandBase {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     @Override
     public String getCommandName() {

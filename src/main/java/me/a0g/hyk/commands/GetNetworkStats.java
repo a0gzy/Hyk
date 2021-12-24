@@ -1,7 +1,7 @@
 package me.a0g.hyk.commands;
 
 import com.google.gson.JsonObject;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.events.Render;
 import me.a0g.hyk.handlers.APIHandler;
 import me.a0g.hyk.utils.ApiUtils;
@@ -14,7 +14,6 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLLog;
-import org.lwjgl.input.Keyboard;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -25,7 +24,7 @@ import java.util.Locale;
 
 public class GetNetworkStats extends CommandBase{
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     @Override
 	public String getCommandName() {

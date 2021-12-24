@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.annotations.Expose;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraftforge.fml.common.FMLLog;
 
 import java.io.*;
@@ -19,7 +19,7 @@ public class HykPos implements Serializable{
     private transient File file;
 
     public HykPos(){
-        this.file = new File(HypixelKentik.dir,"hykpos.json");
+        this.file = new File(Hyk.dir,"hykpos.json");
     }
 
    /* public HykPos() {
@@ -63,7 +63,7 @@ public class HykPos implements Serializable{
     }
 
     public static HykPos load() throws IOException, JsonSyntaxException {
-        final File file = new File(HypixelKentik.dir, "hykpos.json");
+        final File file = new File(Hyk.dir, "hykpos.json");
 
         if(!file.exists()) {
             throw new FileNotFoundException("Configuration file \"" + "hykpos.json" + "\" not found.");

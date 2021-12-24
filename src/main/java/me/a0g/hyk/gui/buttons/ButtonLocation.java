@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.a0g.hyk.core.Feature;
 import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.utils.ColorUtils;
+import me.a0g.hyk.utils.DrawUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiButton;

@@ -15,6 +15,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class APIHandler {
 	public static JsonObject getResponse(String urlString) {
@@ -136,5 +141,35 @@ public class APIHandler {
 		}
 		
 		return latestProfile;
+	}
+
+	public URLConnection prepareConnection(String url) throws IOException {
+		URLConnection urlConnection = (new URL(url)).openConnection();
+		if (urlConnection instanceof HttpURLConnection) {
+			HttpURLConnection httpURLConnection = (HttpURLConnection)urlConnection;
+			httpURLConnection.setRequestMethod("GET");
+			httpURLConnection.setUseCaches(true);
+			httpURLConnection.setReadTimeout(3000);
+			httpURLConnection.setReadTimeout(3000);
+			httpURLConnection.setDoOutput(true);
+			httpURLConnection.addRequestProperty("User-Agent", "Mozilla/5.0 (Essential Initializer)");
+		}
+		return urlConnection;
+	}
+
+	public boolean downloadFile(String url, Path target) {
+		try {
+			URLConnection connection = prepareConnection(url);
+			Files.copy(connection.getInputStream(), target, new CopyOption[] { StandardCopyOption.REPLACE_EXISTING });
+		} catch (IOException e) {
+			//LOGGER.error("Error occurred when downloading file '{}'.", new Object[] { meta.url, e });
+			return false;
+		}
+		//String actualHash = getChecksum(target);
+		//if (!meta.checksum.equals(actualHash)) {
+			//LOGGER.warn("Downloaded Essential file checksum did not match what we expected (actual={}, expected={}", new Object[] { actualHash, meta.checksum });
+		//	return false;
+		//}
+		return true;
 	}
 }

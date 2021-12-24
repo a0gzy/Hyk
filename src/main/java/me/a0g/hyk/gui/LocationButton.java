@@ -1,5 +1,6 @@
 package me.a0g.hyk.gui;
 
+import lombok.Getter;
 import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.gui.buttons.ButtonLocation;
 import me.a0g.hyk.utils.ColorUtils;
@@ -13,8 +14,8 @@ import java.awt.*;
 
 public class LocationButton extends GuiButton {
 
-    private int x;
-    private int y;
+    @Getter private int x;
+    @Getter private int y;
     private float scale;
     private String text;
 

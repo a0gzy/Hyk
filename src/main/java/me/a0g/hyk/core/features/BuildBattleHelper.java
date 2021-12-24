@@ -1,14 +1,13 @@
 package me.a0g.hyk.core.features;
 
-import me.a0g.hyk.HypixelKentik;
-import net.minecraftforge.fml.common.FMLLog;
+import me.a0g.hyk.Hyk;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BuildBattleHelper {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private String theme;
 

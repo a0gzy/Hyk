@@ -1,10 +1,9 @@
 package me.a0g.hyk.gui.buttons;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.core.Feature;
 import lombok.Getter;
 import me.a0g.hyk.utils.ColorUtils;
-import me.a0g.hyk.utils.DrawUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,7 +16,7 @@ public class ButtonResize extends ButtonFeature  {
 
     private static final int SIZE = 2;
 
-    private HypixelKentik main = HypixelKentik.getInstance();
+    private Hyk main = Hyk.getInstance();
 
     private Corner corner;
 

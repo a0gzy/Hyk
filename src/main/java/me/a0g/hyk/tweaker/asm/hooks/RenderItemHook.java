@@ -1,28 +1,21 @@
 package me.a0g.hyk.tweaker.asm.hooks;
 
-import jline.internal.Log;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.utils.ItemUtils;
 import me.a0g.hyk.utils.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Locale;
 
 public class RenderItemHook {
-    private static HypixelKentik main = HypixelKentik.getInstance();
+    private static Hyk main = Hyk.getInstance();
 
     public static void renderRarity(ItemStack itemStack, int xPosition, int yPosition) {
 

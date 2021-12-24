@@ -1,6 +1,6 @@
 package me.a0g.hyk.mytests;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.WebHooks;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.FMLLog;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class SwHook {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
     private static final String webhook = "https://discord.com/api/webhooks/791328152516821042/kmip-QBylmZQHU763fni24f7WBaM_bhLt6ohnn5Zg6HF8dU4PpZjgyqZt16eyo3URkkX";
 
     private String allstring = "";

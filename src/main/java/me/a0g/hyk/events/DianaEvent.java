@@ -2,7 +2,7 @@ package me.a0g.hyk.events;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.APIHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 public class DianaEvent {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
     JsonArray info = new JsonArray();
 
     @SubscribeEvent

@@ -1,7 +1,7 @@
 package me.a0g.hyk.gui;
 
 import lombok.SneakyThrows;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.config.HykPos;
 import me.a0g.hyk.core.Feature;
 import me.a0g.hyk.gui.buttons.ButtonLocation;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class EditLocationsGui extends GuiScreen {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private final Map<Feature, ButtonLocation> buttonLocations = new EnumMap<>(Feature.class);
 
@@ -96,6 +96,7 @@ public class EditLocationsGui extends GuiScreen {
       //  this.buttonList.clear();
         lastMouseX = mouseX;
         lastMouseY = mouseY;
+
 
         /*if (moving != null) {
             switch (moving) {

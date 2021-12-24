@@ -5,25 +5,6 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public enum TransformerMethod {
-    updateScreen("updateScreen", "func_73876_c", "e", "()V"),
-    onGuiClosed("onGuiClosed", "func_146281_b", "m", "()V"),
-    drawScreen("drawScreen", "func_73863_a", "a", "(IIF)V"),
-    initGui("initGui", "func_73866_w", "b", "()V"),
-    keyTyped("keyTyped", "func_73869_a", "a", "(CI)V", true),
-    handleMouseClick("handleMouseClick", "func_146984_a", "a", "(Lnet/minecraft/inventory/Slot;III)V", "(" + TransformerClass.Slot.getName() + "III)V"),
-    mouseClicked("mouseClicked", "func_73864_a", "a", "(III)V", true),
-    drawGradientRect("drawGradientRect", "func_73733_a", "a", "(IIIIII)V"),
-    drawSlot("drawSlot", "func_146977_a", "a", "(Lnet/minecraft/inventory/Slot;)V", "(" + TransformerClass.Slot.getName() + ")V"),
-    checkHotbarKeys("checkHotbarKeys", "func_146983_a", "b", "(I)Z"),
-    actionPerformed("actionPerformed", "func_146284_a", "a", "(Lnet/minecraft/client/gui/GuiButton;)V", "(" + TransformerClass.GuiButton.getName() + ")V"),
-    handleMouseInput("handleMouseInput", "func_178039_p", "p", "()V", true),
-    mouseClickMove("mouseClickMove", "func_146273_a", "a", "(IIIJ)V"),
-    mouseReleased("mouseReleased", "func_146286_b", "b", "(III)V"),
-    drawGuiContainerBackgroundLayer("drawGuiContainerBackgroundLayer", "func_146976_a", "a", "(FII)V"),
-    renderToolTip("renderToolTip", "func_146285_a", "a", "(Lnet/minecraft/item/ItemStack;II)V", "(" + TransformerClass.ItemStack.getName() + "II)V"),
-    handleComponentClick("handleComponentClick", "func_175276_a", "a", "(Lnet/minecraft/util/IChatComponent;)Z", "(" + TransformerClass.IChatComponent.getName() + ")Z"),
-    renderItemAndEffectIntoGUI("renderItemAndEffectIntoGUI", "func_180450_b", "b", "(Lnet/minecraft/item/ItemStack;II)V", "(" + TransformerClass.ItemStack.getName() + "II)V"),
-    drawGuiContainerForegroundLayer("drawGuiContainerForegroundLayer", "func_146979_b", "b", "(II)V"),
     renderItemModelTransform("renderItemModelTransform", "func_175040_a", "a", "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V", "(" + TransformerClass.ItemStack.getName() + TransformerClass.IBakedModel.getName() + TransformerClass.ItemCameraTransforms$TransformType.getName() + ")V"),
     renderItem("renderItem", "func_180454_a", "a", "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V", "(" + TransformerClass.ItemStack.getName() + TransformerClass.IBakedModel.getName() + ")V"),
     renderModel_IBakedModel_ItemStack("renderModel", "func_175036_a", "a", "(Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/item/ItemStack;)V", "(" + TransformerClass.IBakedModel.getName() + TransformerClass.ItemStack.getName() + ")V"),
@@ -78,6 +59,8 @@ public enum TransformerMethod {
 
     shouldSideBeRendered("shouldSideBeRendered", "func_176225_a", "a", "(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/BlockPos;Lnet/minecraft/util/EnumFacing;)Z"),
     getMixedBrightnessForBlock("getMixedBrightnessForBlock", "func_176207_c", "c", "(Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/BlockPos;)I"),
+    setupFog("setupFog","func_78468_a","a","(IF)V"),
+    distanceTo("distanceTo","func_72438_d","f","(Lnet/minecraft/util/Vec3;)D","(" + TransformerClass.Vec3.getName() + ")D"),
 
     playAuxSFX("playAuxSFX", "func_175718_b", "b", "(ILnet/minecraft/util/BlockPos;I)V", "(I" + TransformerClass.BlockPos.getName() + "I)V"),
     updateFramebufferSize("updateFramebufferSize", "func_147119_ah", "ay", "()V"),

@@ -1,44 +1,33 @@
 package me.a0g.hyk.chest;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.utils.TextUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.client.renderer.entity.layers.LayerCape;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemStack;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
-import scala.Int;
-
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Map.Entry;
 
 public class NameT {
 
     public static boolean colorN(final int n, final int b, final int v) {
         return n >= b && n <= v;
     }
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
    /* private final ResourceLocation capea0g = new ResourceLocation("hyk:testcape2.png");
     private final ResourceLocation capelo1d = new ResourceLocation("hyk:lo1dcape.png");
@@ -78,23 +67,50 @@ public class NameT {
 
     }
 
+    @SubscribeEvent
+    public void onRenderWorld(RenderWorldLastEvent e) {
+        if(main.getHyConfig().isNameTag()) {
+            Minecraft mc = Minecraft.getMinecraft();
+
+            Entity renderViewEntity = mc.getRenderViewEntity();
+
+            for (EntityPlayer entity : mc.theWorld.playerEntities) {
+
+                if (renderViewEntity == entity) {
+                    continue;
+                }
+
+                double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
+                double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
+                double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
+
+                renderTag(entity,x,y,z,entity.getDisplayName().getUnformattedText());
+            }
+        }
+    }
 
     @SubscribeEvent
     public void onRender(final RenderPlayerEvent.Pre event){
 
         if(main.getHyConfig().isNamet() ){
+          //  FMLLog.info("1");
             if(Minecraft.getMinecraft().theWorld != null) {
+               // FMLLog.info("2");
                 if (event.entityPlayer != null) {
+                   // FMLLog.info("3");
                     EntityPlayer player = event.entityPlayer;
 
                     if (!event.entityPlayer.isEntityEqual(Minecraft.getMinecraft().thePlayer)) {
+                        //FMLLog.info("4");
+                       // if(player.getName().equalsIgnoreCase("a0g")) return;
 
-                        if(player.getName().equalsIgnoreCase("a0g")) return;
-
-                        if (main.getHyConfig().isNamemm() || main.getUtils().checkForGame("BED WARS") || main.getUtils().checkForGame("MURDER")) {
+                        if (main.getHyConfig().isNamet() || main.getUtils().checkForGame("BED WARS") || main.getUtils().checkForGame("MURDER")) {
+                           // FMLLog.info("4");
                             renderTag(player, event.x, event.y, event.z, event.entityPlayer.getDisplayName().getUnformattedText());
                         }
                         if (renderFromTeam(player) && !main.getHyConfig().isNamemm()) {
+                           // FMLLog.info("5");
                             renderTag(player, event.x, event.y, event.z, event.entityPlayer.getDisplayName().getUnformattedText());
                         }
 
@@ -200,10 +216,14 @@ public class NameT {
         }
 
         double distance = Minecraft.getMinecraft().thePlayer.getDistanceToEntity(entity);
-        float f2 =  ((float)distance * 0.1f + (float)(main.getHyConfig().getNamescale()/10.0f)) * 0.0266f;
+        float f2 =  ( (float)distance * 0.1f + main.getHyConfig().getNamescale() / 10.0f ) * 0.0266f;
+
         if(f2 < 0.02666667F){
             f2 = 0.02666667F;
         }
+
+
+       // double distanceScale = Math.max(1, Minecraft.getMinecraft().thePlayer.getPositionVector().distanceTo(entity.getPositionVector()) / 10F);
 
         final FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
 
@@ -216,7 +236,7 @@ public class NameT {
             } else if (colorN(healthh, 0, 5)) {
                 h = " " + EnumChatFormatting.RED;
             }
-            health = healthh + "";
+            health = healthh + "" + EnumChatFormatting.RED + "❤";
         }
 
         String item = "";
@@ -264,27 +284,36 @@ public class NameT {
         GlStateManager.depthMask(false);
         GlStateManager.disableDepth();
         GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
+       // GlStateManager.enableTexture2D();
+       // GlStateManager.color(1, 1, 1, 1);
+        //GlStateManager.enableAlpha();
+
         String torender = displayTag + h + " " + health + ld + item;
-        final int i = fontrenderer.getStringWidth(torender) / 2;
+        int i = fontrenderer.getStringWidth(torender) / 2;
         if(main.getHyConfig().isNameback()) {
-            final Tessellator tessellator = Tessellator.getInstance();
-            final WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            worldrenderer.pos(-i - 1, -1.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
-            worldrenderer.pos(-i - 1, 8.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
-            worldrenderer.pos(i + 1, 8.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
-            worldrenderer.pos(i + 1, -1.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
-            tessellator.draw();
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        worldrenderer.pos(-i - 1, -1.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
+        worldrenderer.pos(-i - 1, 8.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
+        worldrenderer.pos(i + 1, 8.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
+        worldrenderer.pos(i + 1, -1.0, 0.0).color(0.0f, 0.0f, 0.0f, 0.25f).endVertex();
+        tessellator.draw();
         }
 
         GlStateManager.enableTexture2D();
-        fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender ) / 2, 0, 553648127);
-        GlStateManager.depthMask(true);
-        fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender) / 2, 0, -1);
+        fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender ) / 2 , 0 , -1,true);
+        //new TextRenderer(Minecraft.getMinecraft(),torender,-fontrenderer.getStringWidth(torender ) / 2 , 0,1,-1,true);
+        //fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender ) / 2 + 1.0f, 0 + 1.0f, 553648127,true);
+
+       // fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender) / 2, 0, -1);
+       // fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender) / 2, 0, -1,true);
 
         GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -334,11 +363,13 @@ public class NameT {
         }
 
         GlStateManager.enableTexture2D();
-        fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender ) / 2, 0, 553648127);
         GlStateManager.depthMask(true);
+        fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender ) / 2, 0, 553648127);
+
         fontrenderer.drawString(torender, -fontrenderer.getStringWidth(torender) / 2, 0, -1);
 
         GlStateManager.enableDepth();
+
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);

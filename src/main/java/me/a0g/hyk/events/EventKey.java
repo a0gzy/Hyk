@@ -1,8 +1,9 @@
 package me.a0g.hyk.events;
 
 import gg.essential.api.utils.GuiUtil;
-import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.gui.EditLocationsGui;
+import me.a0g.hyk.Hyk;
+import me.a0g.hyk.commands.HyK;
+import me.a0g.hyk.core.Feature;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
@@ -19,8 +20,10 @@ import java.util.Objects;
 
 public class EventKey {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
     private final Minecraft mc = Minecraft.getMinecraft();
+
+    public static boolean shifting = false;
 
     @SubscribeEvent
     public void onEvent(InputEvent.KeyInputEvent event) {
@@ -34,7 +37,12 @@ public class EventKey {
 
             if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
                 //HypixelKentik.guiToOpen = "edit2";
-                GuiUtil.open(Objects.requireNonNull(new EditLocationsGui()));
+                //GuiUtil.open(Objects.requireNonNull(new EditLocationsGui()));
+                GuiUtil.open(Objects.requireNonNull(HyK.privateGui));
+                Feature.REACHRANGE.floatValue = main.getHyConfig().getRechr();
+                Feature.REACH.isOn = main.getHyConfig().isRech();
+                Feature.NAMETAG.isOn = main.getHyConfig().isNamet();
+
                 return;
             }
 
@@ -54,12 +62,23 @@ public class EventKey {
         //render info  J
         if(keyBindings[2].isPressed()){
 
+            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                shifting = !shifting;
+              //  mc.thePlayer.setSneaking(shifting);
+              //  mc.thePlayer.movementInput.sneak = true;
+               // FMLLog.info(  mc.thePlayer.movementInput.sneak + "");
+              //  KeyBinding.setKeyBindState( Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode() , shifting );
+                return;
+            }
 
-            if(main.getUtils().checkForIsland()){
+
+            if(main.getUtils().checkForIsland() && Render.farm){
                 Render.farmclicksrender = ! Render.farmclicksrender;
             }
 
-            Render.todesignrender = !Render.todesignrender;
+            if(Render.todesignp != null && Render.todesignbw != null && Render.todesignsw != null && Render.todesignsb != null) {
+                Render.todesignrender = !Render.todesignrender;
+            }
 
         }
 

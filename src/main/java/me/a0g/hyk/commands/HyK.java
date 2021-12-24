@@ -2,37 +2,29 @@ package me.a0g.hyk.commands;
 
 import gg.essential.api.EssentialAPI;
 import gg.essential.api.utils.GuiUtil;
-import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.chest.Player;
-import me.a0g.hyk.core.Feature;
-import me.a0g.hyk.events.Cakes;
+import me.a0g.hyk.Hyk;
+import me.a0g.hyk.gui.PrivateGui;
 import me.a0g.hyk.tweaker.asm.hooks.FontRendererHook;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.fml.common.FMLLog;
 
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.util.List;
 
 public class HyK extends CommandBase{
 
-	private final HypixelKentik main = HypixelKentik.getInstance();
+	private final Hyk main = Hyk.getInstance();
 	private String usage1 =
 			EnumChatFormatting.DARK_AQUA + "§m------------§3[" + EnumChatFormatting.LIGHT_PURPLE + "HYK" + EnumChatFormatting.DARK_AQUA + "]§m------------" + "\n" +
+				EnumChatFormatting.GOLD + "Open config -> /hyk or press " + GameSettings.getKeyDisplayString( main.keyBindings[0].getKeyCode() ) +
 			EnumChatFormatting.RED	+ "General" + "\n";
 
 	private String usage2 =
@@ -50,19 +42,18 @@ public class HyK extends CommandBase{
 
 	public static boolean ismuted = false;
 
-	private final Set<String> waypoints = new LinkedHashSet<>(Arrays.asList("/skytilshollowwaypoint set 1 353 61 267",
-			"/skytilshollowwaypoint set 2 347 59 268","/skytilshollowwaypoint set 3 344 61 263",
-			"/skytilshollowwaypoint set 4 351 61 258","/skytilshollowwaypoint set 5 357 53 260",
-			"/skytilshollowwaypoint set 6 348 49 272","/skytilshollowwaypoint set 7 338 52 254",
-			"/skytilshollowwaypoint set 8 341 52 243","/skytilshollowwaypoint set 9 343 52 239",
-			"/skytilshollowwaypoint set 10 326 51 246","/skytilshollowwaypoint set 11 326 56 261",
-			"/skytilshollowwaypoint set 12 318 50 253","/skytilshollowwaypoint set 13 344 48 231",
-			"/skytilshollowwaypoint set 14 307 51 254","/skytilshollowwaypoint set 15 334 46 260",
-			"/skytilshollowwaypoint set 16 300 51 237","/skytilshollowwaypoint set 17 298 48 258",
-			"/skytilshollowwaypoint set 18 291 47 266",
-			"/skytilshollowwaypoint set bomb1 353 48 262", "/skytilshollowwaypoint set bomb2 343 45 256",
-			"/skytilshollowwaypoint set bomb3 337 45 245","/skytilshollowwaypoint set bomb4 327 44 257",
-			"/skytilshollowwaypoint set bomb5 314 45 254","/skytilshollowwaypoint set bomb6 298 44 262"));
+	public static PrivateGui privateGui = new PrivateGui();
+
+	private final Set<String> waypoints = new LinkedHashSet<>(
+			Arrays.asList("/skytilshollowwaypoint set Main 478 52 296",
+			//ruby
+			"/skytilshollowwaypoint set R1 478 52 282","/skytilshollowwaypoint set R2 456 49 302",
+			"/skytilshollowwaypoint set R3 448 42 287",//"/skytilshollowwaypoint set 5 357 53 260",
+					//topaz
+			"/skytilshollowwaypoint set T2 463 49 301","/skytilshollowwaypoint set T3 453 47 304",
+			"/skytilshollowwaypoint set T4 453 42 293","/skytilshollowwaypoint set T5 460 44 284",
+			"/skytilshollowwaypoint set T6 466 55 312"
+			));
 
 	@Override
 	public String getCommandName() {
@@ -78,7 +69,7 @@ public class HyK extends CommandBase{
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		if (args.length == 1) {
-			return getListOfStringsMatchingLastWord(args, "help","gui","api","cn","edit","fake","waypoints");
+			return getListOfStringsMatchingLastWord(args, "help","gui","api","fake","waypoints");
 		}
 		return null;
 	}
@@ -105,32 +96,15 @@ public class HyK extends CommandBase{
 			main.getUtils().sendMessage(usage2,false);
 		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("fake")){
-			main.getUtils().sendMessage("§b/hyk fake §c<Message>");
-		}
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("a0g")){
 			FontRendererHook.a0g = !FontRendererHook.a0g;
 		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("mute")){
-			main.getUtils().sendMessage("Game Muted " + Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER));
-			ismuted=true;
-			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0);
-		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("unmute")){
-			main.getUtils().sendMessage("Game UnMuted");
-			ismuted=false;
-			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0.03F);
+		else if(args.length == 1 && args[0].equalsIgnoreCase("fake")){
+			main.getUtils().sendMessage("§b/hyk fake §c<Message>");
 		}
-
-		else if(args.length == 2 && args[0].equalsIgnoreCase("unmute")){
-			main.getUtils().sendMessage("Game UnMuted");
-			ismuted=false;
-			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,Float.parseFloat(args[1] )+ 0.0F);
-		}
-
 		else if(args[0].equalsIgnoreCase("fake")){
 			String fakemessage = "";
 //			String fakemessage = args[1].replaceAll("&","§");
@@ -141,18 +115,25 @@ public class HyK extends CommandBase{
 			main.getUtils().sendMessage(fakemessage,false);
 		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("edit")){
+		// Mb private
+		/*else if(args.length == 1 && args[0].equalsIgnoreCase("edit")){
 			HypixelKentik.guiToOpen = "editlocations";
-		}
+		}*/
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("edit2")){
+
+		/*else if(args.length == 1 && args[0].equalsIgnoreCase("edit2")){
 			//HypixelKentik.guiToOpen = "edit2";
 			//HypixelKentik.guiToOpen = "editlocations";
 			//GuiUtil.open(Objects.requireNonNull(new LocationsEditGui()));
-		}
+		}*/
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("gui")){
-			HypixelKentik.guiToOpen = "hykguiGeneral1";
+			Hyk.guiToOpen = "hykguiGeneral1";
+		}
+
+		else if(args.length == 1 && args[0].equalsIgnoreCase("gui2")){
+			//GuiUtil.open(Objects.requireNonNull(privateGui));
+			privateGui = new PrivateGui();
 		}
 
 		else if(args.length == 1 && args[0].equalsIgnoreCase("getMods")){
@@ -202,25 +183,23 @@ public class HyK extends CommandBase{
 		else if(args.length == 1 && args[0].equalsIgnoreCase("dev")){
 
 			main.isDev = !main.isDev;
+			main.getUtils().sendMessage("Dev - " + main.isDev);
 
 		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("game")){
+		// Needed rework
+		/*else if(args.length == 1 && args[0].equalsIgnoreCase("game")){
 
 			main.getUtils().sendMessage("Example: /play arcade_party_games_1");
 			main.getUtils().sendMessage("Command: " + Cakes.gamemsg);
 
 		}
-
-
-
 		else if(args.length == 2 && args[0].equalsIgnoreCase("game")){
-
 			main.getUtils().sendMessage(" " + args[1]);
 			Cakes.gamemsg = args[1];
+		}*/
 
-		}
-
+		//api
 		else if(args.length == 2 && args[0].equalsIgnoreCase("api")){
 			main.getHyConfig().setApikeyy(args[1]);
 			main.getUtils().sendMessage(main.getHyConfig().getApikeyy());
@@ -251,44 +230,6 @@ public class HyK extends CommandBase{
 			main.getUtils().createTitle("TEST ",5);
 		}
 
-		else if(args[0].equalsIgnoreCase("rename")){
-
-			if(Minecraft.getMinecraft().thePlayer.getHeldItem() != null ){
-				ItemStack item = Minecraft.getMinecraft().thePlayer.getHeldItem();
-				String torename = "";
-				for(int i = 1; i < args.length;i++){
-					torename += args[i] + " ";
-				}
-				item.setStackDisplayName( torename.replaceAll("&","§") );
-			}
-
-		}
-
-		else if(args.length == 3 && args[0].equalsIgnoreCase("test")){
-
-//			Minecraft.getMinecraft().thePlayer.inventory.armorInventory[0] = new ItemStack(Item.getItemById(89));
-
-			main.getUtils().sendMessage(EnumChatFormatting.AQUA + "Test");
-
-			/*EntityPlayerSP pl = Minecraft.getMinecraft().thePlayer;
-			EntityPlayerSP pl2 = Minecraft.getMinecraft().thePlayer;
-			pl2.setSize(Float.parseFloat( args[1] ), Float.parseFloat( args[2] ));
-
-
-			Minecraft.getMinecraft().thePlayer = pl2;
-			main.getUtils().sendMessage(pl.height + " " + pl.width);*/
-
-			main.getUtils().createTitle("TEST ",5);
-		}
-
-		else if(args.length == 1 && args[0].equalsIgnoreCase("time")){
-			FMLLog.info(new Date().getTime() + "");
-		}
-
-		/*else if(args.length == 3 && args[0].equalsIgnoreCase("kb")){
-			EntityPlayerSP pl =  Minecraft.getMinecraft().thePlayer;
-		}*/
-
 		else if(args.length == 1 && args[0].equalsIgnoreCase("entity")){
 			EntityPlayerSP p = Minecraft.getMinecraft().thePlayer;
 			AxisAlignedBB aabb = new AxisAlignedBB(p.posX - 4,p.posY - 4,p.posZ - 4,p.posX + 4,p.posY + 4,p.posZ + 4);
@@ -299,7 +240,7 @@ public class HyK extends CommandBase{
 
 		}
 
-		else if(args.length == 1 && args[0].equalsIgnoreCase("cn")){
+		/*else if(args.length == 1 && args[0].equalsIgnoreCase("cn")){
 			if(!main.getHyConfig().getCustomname().isEmpty()){
 				main.getUtils().sendMessage( EnumChatFormatting.YELLOW +"Custom name: " + EnumChatFormatting.RESET + main.getHyConfig().getCustomname() );
 			}
@@ -311,7 +252,25 @@ public class HyK extends CommandBase{
 			main.getUtils().sendMessage(main.getHyConfig().getCustomname());
 			main.getHyConfig().markDirty();
 			main.getHyConfig().writeData();
+		}*/
+
+		/*else if(args.length == 1 && args[0].equalsIgnoreCase("mute")){
+			main.getUtils().sendMessage("Game Muted " + Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.MASTER));
+			ismuted=true;
+			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0);
 		}
+
+		else if(args.length == 1 && args[0].equalsIgnoreCase("unmute")){
+			main.getUtils().sendMessage("Game UnMuted");
+			ismuted=false;
+			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,0.03F);
+		}
+
+		else if(args.length == 2 && args[0].equalsIgnoreCase("unmute")){
+			main.getUtils().sendMessage("Game UnMuted");
+			ismuted=false;
+			Minecraft.getMinecraft().gameSettings.setSoundLevel(SoundCategory.MASTER,Float.parseFloat(args[1] )+ 0.0F);
+		}*/
 
 		else {
 			main.getUtils().sendMessage(usage1,false);

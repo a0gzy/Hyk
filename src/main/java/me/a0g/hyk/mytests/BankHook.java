@@ -1,6 +1,6 @@
 package me.a0g.hyk.mytests;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.WebHooks;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class BankHook {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
     private static final String webhook = "https://discord.com/api/webhooks/791301654782803970/H_Uyo_vCZdQttYBy1IPzi5m-FQDQkYZ0YbDdvCDyOU5c7ATISkNftJRUdDmQP7foP33Z";
 
     @SubscribeEvent

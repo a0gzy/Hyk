@@ -1,19 +1,18 @@
 package me.a0g.hyk.chest;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 public class FairyTest {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event){
         if( main.getHyConfig().isFairysp() ){

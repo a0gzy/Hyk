@@ -84,7 +84,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "Time display."
     )
-    private boolean timed = true;
+    private boolean timed = false;
 
     @Property(
             type = PropertyType.COLOR,
@@ -128,7 +128,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "Armor display."
     )
-    private boolean armorh = true;
+    private boolean armorh = false;
 
 
 
@@ -139,7 +139,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "FPS display."
     )
-    private boolean fpsd = true;
+    private boolean fpsd = false;
 
     @Property(
             type = PropertyType.COLOR,
@@ -159,7 +159,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "CPS display."
     )
-    private boolean cpsd = true;
+    private boolean cpsd = false;
 
     @Property(
             type = PropertyType.COLOR,
@@ -221,7 +221,7 @@ public class HyConfig extends Vigilant {
             subcategory = "Price",
             description = "Display price per each on bin"
     )
-    private boolean sbPriceEach = true;
+    private boolean sbPriceEach = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -253,12 +253,39 @@ public class HyConfig extends Vigilant {
 
     @Property(
             type = PropertyType.SWITCH,
+            name = "Auto Melody",
+            category = "SkyBlock",
+            subcategory = "Cool",
+            description = "Auto Melody's Harp."
+    )
+    private boolean autoMelody = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Auto Powder Chest",
+            category = "SkyBlock",
+            subcategory = "Cool",
+            description = "Auto Powder Chest."
+    )
+    private boolean autoPowderChest = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Auto Powder",
+            category = "SkyBlock",
+            subcategory = "Cool",
+            description = "Auto Powder."
+    )
+    private boolean autoPowder = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
             name = "Cakes display",
             category = "SkyBlock",
             subcategory = "SkyBlock",
             description = "Hours to cakes end."
     )
-    private boolean cakedisplay = true;
+    private boolean cakedisplay = false;
 
     @Property(
             type = PropertyType.COLOR,
@@ -273,20 +300,47 @@ public class HyConfig extends Vigilant {
     @Property(
             type = PropertyType.SWITCH,
             name = "Dungeon stared",
-            category = "SkyBlock",
-            subcategory = "SkyBlock",
+            category = "Dungeons",
+            subcategory = "Mob",
             description = "Mini bosses in names in dungeons."
     )
-    private boolean dungeonstared = true;
+    private boolean dungeonstared = false;
 
     @Property(
             type = PropertyType.SWITCH,
             name = "Dungeon stared distance",
-            category = "SkyBlock",
-            subcategory = "SkyBlock",
+            category = "Dungeons",
+            subcategory = "Mob",
             description = "Show distance to mobs."
     )
     private boolean dungeonstareddistance = true;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "NoStonk",
+            category = "Dungeons",
+            subcategory = "Cool",
+            description = "Interact through walls."
+    )
+    private boolean noStonk = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "AutoCloseChest",
+            category = "Dungeons",
+            subcategory = "Cool",
+            description = "Auto close chests in dungeons."
+    )
+    private boolean autoCloseChest = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "GhostBlocks",
+            category = "Dungeons",
+            subcategory = "Cool",
+            description = "Create ghost blocks."
+    )
+    private boolean ghostBlocks = false;
 
 
 
@@ -297,7 +351,7 @@ public class HyConfig extends Vigilant {
             subcategory = "SkyBlock",
             description = "Display active Commissions."
     )
-    private @Getter boolean commsdispl = true;
+    private @Getter boolean commsdispl = false;
 
     @Property(
             type = PropertyType.COLOR,
@@ -317,7 +371,7 @@ public class HyConfig extends Vigilant {
             subcategory = "SkyBlock",
             description = "Make damage look cool."
     )
-    private boolean damagesb = true;
+    private boolean damagesb = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -393,6 +447,28 @@ public class HyConfig extends Vigilant {
     )
     private boolean xr = false;
 
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "r",
+            category = "Private",
+            subcategory = "General",
+            description = "R."
+    )
+    private boolean rech = false;
+
+    @Property(
+            type = PropertyType.DECIMAL_SLIDER,
+            name = "rr",
+            category = "Private",
+            subcategory = "General",
+            description = "Rr.",
+            minF = 3.0f,
+            maxF = 6.0f,
+            decimalPlaces = 2
+    )
+    private float rechr = 3.0f;
+
     @Property(
             type = PropertyType.SWITCH,
             name = "HitFix",
@@ -407,9 +483,10 @@ public class HyConfig extends Vigilant {
             name = "Blidness",
             category = "Private",
             subcategory = "General",
-            description = "Toggle antiblidness."
+            description = "Toggle antiblidness.",
+            hidden = true
     )
-    private boolean antiblidness = true;
+    private boolean antiblidness = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -418,7 +495,7 @@ public class HyConfig extends Vigilant {
             subcategory = "General",
             description = "Toggle antifog."
     )
-    private boolean antifog = true;
+    private boolean antifog = false;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -464,6 +541,16 @@ public class HyConfig extends Vigilant {
             description = "Toggle PSP."
     )
     private boolean psp = false;
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "NameTag",
+            category = "Private",
+            subcategory = "Name",
+            description = "Toggle NameTag.",
+            hidden = true
+    )
+    private boolean nameTag = false;
 
     @Property(
             type = PropertyType.SWITCH,

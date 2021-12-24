@@ -1,22 +1,10 @@
 package me.a0g.hyk.mytests;
 
-import javafx.application.Application;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.utils.Utils;
-import net.minecraft.client.Minecraft;
-import org.apache.commons.io.FileUtils;
 
-import java.awt.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 
 public class DeleteHook extends Thread {
 
@@ -33,7 +21,7 @@ public class DeleteHook extends Thread {
             String java = Utils.getJavaRuntime();
             System.out.println(java);
 
-            File taskDir = new File(HypixelKentik.dir, "update");
+            File taskDir = new File(Hyk.dir, "update");
             File myFile = new File(taskDir, "HykFileDeleter.jar");
 
             System.out.println("File to delete " + this.file.getAbsolutePath());

@@ -2,7 +2,7 @@ package me.a0g.hyk.commands;
 
 import com.google.gson.JsonObject;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.APIHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +13,7 @@ import java.util.*;
 
 public class GetSwAll extends CommandBase{
 
-	private final HypixelKentik main = HypixelKentik.getInstance();
+	private final Hyk main = Hyk.getInstance();
 
 		@Override
 		public String getCommandName() {
@@ -35,7 +35,7 @@ public class GetSwAll extends CommandBase{
 		@Override
 		public void processCommand(ICommandSender sender, String[] args) {
 
-			if(args.length == 1 && HypixelKentik.isInteger(args[0])){
+			if(args.length == 1 && Hyk.isInteger(args[0])){
 
 				List<String> lobbynames = main.getTabutil().getTabUsernames();
 

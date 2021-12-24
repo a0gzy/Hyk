@@ -49,6 +49,8 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new RenderItemTransformer());
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new BlockTransformer());
+        registerTransformer(new ChunkTransformer());
+        registerTransformer(new NetworkManagerTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {
@@ -84,7 +86,7 @@ public class ClassTransformer implements IClassTransformer {
         }
 
         // what?????
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
         try {
             // write™

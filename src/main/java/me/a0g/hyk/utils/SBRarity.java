@@ -13,6 +13,7 @@ public enum SBRarity {
     EPIC("EPIC", EnumChatFormatting.DARK_PURPLE, new Color(170,0,170)),
     LEGENDARY("LEGENDARY", EnumChatFormatting.GOLD, new Color(255,170,0)),
     MYTHIC("MYTHIC", EnumChatFormatting.LIGHT_PURPLE, new Color(255,85,255)),
+    DIVINE("DIVINE", EnumChatFormatting.AQUA, new Color(85,255,255)),
     SUPREME("SUPREME", EnumChatFormatting.DARK_RED, new Color(170,0,0)),
     SPECIAL("SPECIAL", EnumChatFormatting.RED, new Color(255,85,85)),
     VERY_SPECIAL("VERY SPECIAL", EnumChatFormatting.RED, new Color(170,0,0));

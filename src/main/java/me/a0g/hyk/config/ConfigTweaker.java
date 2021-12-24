@@ -4,8 +4,7 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.core.Feature;
+import me.a0g.hyk.Hyk;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -30,7 +29,7 @@ public abstract class ConfigTweaker implements Serializable {
      * @param fileName name of the file this configuration should save to
      */
     public ConfigTweaker(String fileName) {
-        setFile(new File(HypixelKentik.dir, fileName));
+        setFile(new File(Hyk.dir, fileName));
     }
 
     /**
@@ -45,7 +44,7 @@ public abstract class ConfigTweaker implements Serializable {
         return this;
     }
 
-    private HypixelKentik main = HypixelKentik.getInstance();
+    private Hyk main = Hyk.getInstance();
 
     /**
      * Save this configuration
@@ -81,7 +80,7 @@ public abstract class ConfigTweaker implements Serializable {
      * @throws JsonSyntaxException Invalid JSON
      */
     public static ConfigTweaker load(String name, Class<? extends ConfigTweaker> type) throws IOException, JsonSyntaxException {
-        final File file = new File(HypixelKentik.dir, name);
+        final File file = new File(Hyk.dir, name);
 
         if(!file.exists()) {
             throw new FileNotFoundException("Configuration file \"" + name + "\" not found.");

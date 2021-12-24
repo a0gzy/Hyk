@@ -1,6 +1,6 @@
 package me.a0g.hyk.tweaker.asm.hooks;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.utils.ChromaManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.awt.*;
 import java.util.Locale;
@@ -17,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class FontRendererHook {
 
-    private static HypixelKentik main = HypixelKentik.getInstance();
+    private static Hyk main = Hyk.getInstance();
     public static boolean a0g = true;
 
     public static String changeTextColor(String text) {

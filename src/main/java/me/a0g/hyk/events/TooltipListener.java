@@ -1,13 +1,11 @@
 package me.a0g.hyk.events;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.utils.TextUtils;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
@@ -15,7 +13,22 @@ import java.util.Locale;
 
 public class TooltipListener {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
+
+
+   // public static String hitReach = "Last hit 0.00";
+
+    /*@SubscribeEvent
+    public void onEntityDamaged(AttackEntityEvent e){
+        FMLLog.info("Event");
+        System.out.println("hasda");
+        if(e.target instanceof EntityPlayerSP){
+            //Vec3 vec3 = Minecraft.getMinecraft().getRenderViewEntity().getPositionEyes(1.0F);
+          //  double range = Minecraft.getMinecraft().objectMouseOver.hitVec.distanceTo(vec3);
+            FMLLog.info("Hit");
+           hitReach = "Last hit " + Minecraft.getMinecraft().thePlayer.getDistanceToEntity(e.entity);
+        }
+    }*/
 
 
     @SubscribeEvent

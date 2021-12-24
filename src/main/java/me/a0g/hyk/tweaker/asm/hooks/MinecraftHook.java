@@ -1,11 +1,11 @@
 package me.a0g.hyk.tweaker.asm.hooks;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.client.Minecraft;
 
 public class MinecraftHook{
 
-    private static HypixelKentik main = HypixelKentik.getInstance();
+    private static Hyk main = Hyk.getInstance();
 
     public static void hitfix() {
         if(main.getHyConfig().isHitfix()){

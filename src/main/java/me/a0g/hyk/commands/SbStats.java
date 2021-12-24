@@ -2,7 +2,7 @@ package me.a0g.hyk.commands;
 
 
 import com.google.gson.JsonObject;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.events.Render;
 import me.a0g.hyk.handlers.APIHandler;
 import me.a0g.hyk.utils.ApiUtils;
@@ -19,13 +19,12 @@ import net.minecraftforge.fml.common.FMLLog;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 public class SbStats extends CommandBase {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     @Override
     public String getCommandName() {

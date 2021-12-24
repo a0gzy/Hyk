@@ -1,8 +1,7 @@
 package me.a0g.hyk.commands;
 
 import com.google.gson.JsonObject;
-import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.events.Render;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.APIHandler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -14,7 +13,7 @@ import java.util.*;
 
 public class GetBw extends CommandBase {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
 	
 	@Override

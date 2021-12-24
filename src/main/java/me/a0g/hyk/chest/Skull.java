@@ -1,6 +1,6 @@
 package me.a0g.hyk.chest;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.tileentity.TileEntitySkull;
@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Skull {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     @SubscribeEvent
     public void onWorldRender(RenderWorldLastEvent event){

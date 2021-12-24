@@ -2,7 +2,7 @@ package me.a0g.hyk.core;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.config.HykPos;
 import me.a0g.hyk.events.Render;
 import me.a0g.hyk.events.TextRenderer;
@@ -21,19 +21,22 @@ import java.util.*;
 public enum Feature {
 
 
-    TIME(0,"12:00", HypixelKentik.getInstance().getHykPos().time),
-    FPS(1,"FPS 555",HypixelKentik.getInstance().getHykPos().fps),
-    SPRINT(2,"Sprint",HypixelKentik.getInstance().getHykPos().sprint),
-    CPS(3,"CPS: 0",HypixelKentik.getInstance().getHykPos().cps),
-    CAKES(4,"1d5h",HypixelKentik.getInstance().getHykPos().cakes),
-    ARMORHUD(5,"",HypixelKentik.getInstance().getHykPos().armorhud),
+    TIME(0,"12:00", Hyk.getInstance().getHykPos().time),
+    FPS(1,"FPS 555", Hyk.getInstance().getHykPos().fps),
+    SPRINT(2,"Sprint", Hyk.getInstance().getHykPos().sprint),
+    CPS(3,"CPS: 0", Hyk.getInstance().getHykPos().cps),
+    CAKES(4,"1d5h", Hyk.getInstance().getHykPos().cakes),
+    ARMORHUD(5,"", Hyk.getInstance().getHykPos().armorhud),
     COMMISSIONS(6,"§9 Commissions\n" +
             "Mithrill miner 80%\n" +
             "Mithrill miner 80%\n" +
             "Mithrill miner 80%\n" +
             "Mithrill miner 80%\n" +
             "\n" +
-            "Mithrill powder 10,243",HypixelKentik.getInstance().getHykPos().commissions);
+            "Mithrill powder 10,243", Hyk.getInstance().getHykPos().commissions),
+    REACH(7,"Reach", Hyk.getInstance().getHyConfig().isRech()),
+    NAMETAG(9,"NameTag", Hyk.getInstance().getHyConfig().isNamet()),
+    REACHRANGE(8,"Range:", Hyk.getInstance().getHyConfig().getRechr());
 
 
     @Getter
@@ -52,6 +55,8 @@ public enum Feature {
     private int x;
     private int y;
     private float scale;
+    public boolean isOn;
+    public float floatValue;
 
     Feature(int id,String text,HykPos.PosTweak posTweak){
         this.id = id;
@@ -60,6 +65,16 @@ public enum Feature {
         this.x = posTweak.x;
         this.y = posTweak.y;
         this.scale = posTweak.scale;
+    }
+
+    Feature(int id,String text,boolean isOn){
+        this.id = id;
+        this.isOn = isOn;
+    }
+
+    Feature(int id,String text,float floatValue){
+        this.id = id;
+        this.floatValue = floatValue;
     }
 
     Feature(int id,HykPos.PosTweak posTweak){
@@ -71,13 +86,13 @@ public enum Feature {
 
     public static void setFromConfig(){
 
-        TIME.posTweak = HypixelKentik.getInstance().getHykPos().time;
-        SPRINT.posTweak = HypixelKentik.getInstance().getHykPos().sprint;
-        CPS.posTweak = HypixelKentik.getInstance().getHykPos().cps;
-        FPS.posTweak = HypixelKentik.getInstance().getHykPos().fps;
-        CAKES.posTweak = HypixelKentik.getInstance().getHykPos().cakes;
-        COMMISSIONS.posTweak = HypixelKentik.getInstance().getHykPos().commissions;
-        ARMORHUD.posTweak = HypixelKentik.getInstance().getHykPos().armorhud;
+        TIME.posTweak = Hyk.getInstance().getHykPos().time;
+        SPRINT.posTweak = Hyk.getInstance().getHykPos().sprint;
+        CPS.posTweak = Hyk.getInstance().getHykPos().cps;
+        FPS.posTweak = Hyk.getInstance().getHykPos().fps;
+        CAKES.posTweak = Hyk.getInstance().getHykPos().cakes;
+        COMMISSIONS.posTweak = Hyk.getInstance().getHykPos().commissions;
+        ARMORHUD.posTweak = Hyk.getInstance().getHykPos().armorhud;
     }
 
     public boolean isGuiFeature() {
@@ -86,7 +101,7 @@ public enum Feature {
 
     public void draw(Minecraft mc){
 
-        HypixelKentik main = HypixelKentik.getInstance();
+        Hyk main = Hyk.getInstance();
 
         if(this ==  SPRINT){
             if(main.getHyConfig().isAutoSprintDisplay()) {
@@ -166,7 +181,7 @@ public enum Feature {
                 else {
                     int offset = (-16 * item) + 48;
 
-                    HypixelKentik.getInstance().getUtils().renderArmor(armor, posTweak.x/posTweak.scale, posTweak.y/posTweak.scale + offset, -100);
+                    Hyk.getInstance().getUtils().renderArmor(armor, posTweak.x/posTweak.scale, posTweak.y/posTweak.scale + offset, -100);
                  //   main.getUtils().renderArmor(armor, Move.armorXY[0], Move.armorXY[1] + offset, -100);
                 }
 
@@ -182,7 +197,7 @@ public enum Feature {
 
     public void drawForPos(Minecraft mc,ButtonLocation buttonLocation){
 
-        HypixelKentik main = HypixelKentik.getInstance();
+        Hyk main = Hyk.getInstance();
         FontRenderer rendererer = Minecraft.getMinecraft().fontRendererObj;
 
         if(this ==  SPRINT){
@@ -264,7 +279,7 @@ public enum Feature {
             for(int i = 0;i<4;i++) {
                 ItemStack armorr = new ItemStack(Item.getItemById(313-i));
                 int offset = (-16 * i) + 48;
-                HypixelKentik.getInstance().getUtils().renderArmor(armorr, posTweak.x/posTweak.scale, posTweak.y/posTweak.scale + offset, -100);
+                Hyk.getInstance().getUtils().renderArmor(armorr, posTweak.x/posTweak.scale, posTweak.y/posTweak.scale + offset, -100);
 
             }
             GlStateManager.popMatrix();

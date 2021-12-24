@@ -1,19 +1,16 @@
 package me.a0g.hyk.utils;
 
-import jline.internal.Log;
 import lombok.Getter;
 import lombok.Setter;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 
 import me.a0g.hyk.events.Cakes;
 import me.a0g.hyk.events.Render;
 import me.a0g.hyk.events.TextRenderer;
 import me.a0g.hyk.handlers.ScoreboardHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiPlayerTabOverlay;
-import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -24,6 +21,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
+import net.minecraft.inventory.ContainerChest;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -42,7 +41,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -51,7 +50,7 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public final String MESSAGE_PREFIX = EnumChatFormatting.DARK_AQUA + "[" + EnumChatFormatting.LIGHT_PURPLE + "HYK" + EnumChatFormatting.DARK_AQUA + "] " + EnumChatFormatting.RESET;
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private boolean depthEnabled;
     private boolean blendEnabled;
@@ -217,6 +216,14 @@ public class Utils {
         GlStateManager.disableRescaleNormal();
     }
 
+    public static void sleep(int sleeptime) {
+        try {
+            Thread.sleep(sleeptime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void renderArmor(ItemStack item, float x, float y, float z) {
 
         GlStateManager.pushMatrix();
@@ -248,6 +255,27 @@ public class Utils {
         GlStateManager.disableRescaleNormal();
 
         GlStateManager.popMatrix();
+    }
+
+    public ArrayList<String> getTabList(){
+        if(Minecraft.getMinecraft().thePlayer == null && Minecraft.getMinecraft().theWorld == null)
+            return null;
+        Minecraft mc = Minecraft.getMinecraft();
+
+        NetHandlerPlayClient netHandler = mc.thePlayer.sendQueue;
+        List<NetworkPlayerInfo> fullList = GuiPlayerTabOverlay.field_175252_a.sortedCopy(netHandler.getPlayerInfoMap());
+        GuiPlayerTabOverlay tabList = Minecraft.getMinecraft().ingameGUI.getTabList();
+
+        ArrayList<String> tab = new ArrayList<>();
+
+        for (int entry = 0; entry < fullList.size(); entry ++) {
+            tab.add(tabList.getPlayerName(fullList.get(entry)));
+        }
+        return tab;
+    }
+
+    public boolean checkHollows(){
+        return getTabList().contains("Crystal Hollows");
     }
 
     public String getCommissions(Minecraft mc){
@@ -303,9 +331,9 @@ public class Utils {
 
     public void createTitle(String text, int seconds) {
         Minecraft.getMinecraft().thePlayer.playSound("random.orb", 1, (float) 0.5);
-        HypixelKentik.titleTimer = seconds * 20;
-        HypixelKentik.showTitle = true;
-        HypixelKentik.titleText = text;
+        Hyk.titleTimer = seconds * 20;
+        Hyk.showTitle = true;
+        Hyk.titleText = text;
     }
 
     public void drawTitle(String text) {
@@ -332,6 +360,7 @@ public class Utils {
     }
 
     public boolean checkForSkyblock() {
+        if(main.isDev) return true;
         Minecraft mc = Minecraft.getMinecraft();
         if (mc != null && mc.theWorld != null && !mc.isSingleplayer()) {
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);
@@ -346,7 +375,20 @@ public class Utils {
         return false;
     }
 
+    public String getGuiName(GuiScreen gui) {
+        if (gui instanceof GuiChest)
+            return ((ContainerChest)((GuiChest)gui).inventorySlots).getLowerChestInventory().getDisplayName().getUnformattedText();
+        return "";
+    }
+
+    public String getInventoryName() {
+        if (Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null)
+            return "null";
+        return ((Slot)Minecraft.getMinecraft().thePlayer.openContainer.inventorySlots.get(0)).inventory.getName();
+    }
+
     public boolean checkForGame(String minigame) {
+
         Minecraft mc = Minecraft.getMinecraft();
         if (mc != null && mc.theWorld != null && !mc.isSingleplayer()) {
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);
@@ -483,6 +525,7 @@ public class Utils {
     }
 
     public boolean checkForDungeons() {
+        if(main.isDev) return true;
         if (checkForSkyblock()) {
             List<String> scoreboard = ScoreboardHandler.getSidebarLines();
             for (String s : scoreboard) {

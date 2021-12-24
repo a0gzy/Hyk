@@ -65,6 +65,7 @@ public enum TransformerClass {
     WorldClient("net/minecraft/client/multiplayer/WorldClient", "bdb"),
     ItemArmor("net/minecraft/item/ItemArmor", "yj"),
     World("net/minecraft/world/World", "adm"),
+    Vec3("net/minecraft/util/Vec3", "aui"),
     IBlockSource("net/minecraft/dispenser/IBlockSource", "ck"),
     WorldRenderer("net/minecraft/client/renderer/WorldRenderer", "bfd"),
     WorldVertexBufferUploader("net/minecraft/client/renderer/WorldVertexBufferUploader", "bfe"),

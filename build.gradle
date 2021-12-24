@@ -4,7 +4,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "6f53277"
 }
 
-version = "3.0.9"
+version = "3.1.2"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
@@ -17,13 +17,13 @@ minecraft {
     runDir = "run"
     mappings = "stable_22"
     makeObfSourceJar = false
-    clientRunArgs += ["--tweakClass=gg.essential.loader.stage0.EssentialSetupTweaker"]
+    clientRunArgs += ["--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker"]
     clientJvmArgs += "-Dfml.coreMods.load=me.a0g.hyk.tweaker.ASMTweaker"
 }
 
 configurations {
     embed
-    compile.extendsFrom(embed)
+    implementation.extendsFrom(embed)
 }
 
 repositories {
@@ -59,10 +59,8 @@ dependencies {
 
    // embed "gg.essential:loader-launchwrapper:1.0.2"
 
-    embed "gg.essential:loader-launchwrapper:1.1.0"
-    //implementation "gg.essential:Essential:1221-10809-SNAPSHOT"
-    implementation "gg.essential:essential-1.8.9-forge:1282"
-
+    embed "gg.essential:loader-launchwrapper:1.1.2"
+    implementation "gg.essential:essential-1.8.9-forge:1576+release-launch"
 
 }
 
@@ -102,30 +100,18 @@ moveResources.dependsOn processResources
 classes.dependsOn moveResources
 
 jar {
-    dependsOn configurations.compile
-    archiveFileName = "hyk-${project.version}.jar"
-    from({
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }) {
+    dependsOn configurations.embed
+    archiveFileName =  "${archivesBaseName}-${project.version}.jar"
+    from(configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }) {
         exclude 'club.sk1er.vigilance.example.ExampleMod', 'dummyThing'
         def i = 0
         filesMatching("META-INF/NOTICE*") { name = "$name.${i++}" }
         filesMatching("META-INF/LICENSE*") { name = "$name.${i++}" }
         filesMatching("META-INF/mods.toml") { name = "$name.${i++}" }
         filesMatching("LICENSE*") { name = "$name.${i++}" }
-
     }
 
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
-    manifest {
-        attributes(
-                "ModSide": "CLIENT",
-                "FMLCorePluginContainsFMLMod": "Yes, yes it does"
-        )
-
-    }
     manifest {
         attributes(
                 "FMLCorePluginContainsFMLMod": "true",

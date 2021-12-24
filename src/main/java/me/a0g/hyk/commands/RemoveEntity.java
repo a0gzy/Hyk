@@ -1,6 +1,6 @@
 package me.a0g.hyk.commands;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandBase;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class RemoveEntity extends CommandBase {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     @Override
     public String getCommandName() {

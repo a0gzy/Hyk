@@ -5,9 +5,7 @@ package me.a0g.hyk.mytests;
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
 import com.jagrosh.discordipc.entities.RichPresence;
-import me.a0g.hyk.HypixelKentik;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.fml.common.FMLLog;
+import me.a0g.hyk.Hyk;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
@@ -17,7 +15,7 @@ import java.util.TimerTask;
 
 public class DiscordRPCManager implements IPCListener {
 
-    private final HypixelKentik main = HypixelKentik.getInstance();
+    private final Hyk main = Hyk.getInstance();
 
     private boolean connected = false;
     private boolean firstconection = true;
@@ -56,7 +54,7 @@ public class DiscordRPCManager implements IPCListener {
                         .setDetails(details)
                         .setState(state)
                         .setStartTimestamp(startTimestamp)
-                        .setLargeImage("rpc","Hyk " + HypixelKentik.VERSION + " by a0g#1387")
+                        .setLargeImage("rpc","Hyk " + Hyk.VERSION + " by a0g#1387")
                         .build();
                 client.sendRichPresence(presence);
 
@@ -87,7 +85,7 @@ public class DiscordRPCManager implements IPCListener {
                 RichPresence presence = new RichPresence.Builder()
                         .setDetails(details)
                         .setState(state)
-                        .setLargeImage("rpc", "Hyk " + HypixelKentik.VERSION + " by a0g#1387")
+                        .setLargeImage("rpc", "Hyk " + Hyk.VERSION + " by a0g#1387")
                         .setSmallImage(smallImageKey, smallImageText)
                         .setStartTimestamp(startTimestamp)
                         .build();
@@ -96,7 +94,7 @@ public class DiscordRPCManager implements IPCListener {
                 RichPresence presence = new RichPresence.Builder()
                         .setDetails(details)
                         .setState(state)
-                        .setLargeImage("rpc", "Hyk " + HypixelKentik.VERSION + " by a0g#1387")
+                        .setLargeImage("rpc", "Hyk " + Hyk.VERSION + " by a0g#1387")
                         .setStartTimestamp(startTimestamp)
                         .build();
                 client.sendRichPresence(presence);

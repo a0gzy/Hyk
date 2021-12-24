@@ -1,14 +1,14 @@
 package me.a0g.hyk.utils;
 
 import lombok.Getter;
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
 import java.awt.*;
 
 public class ChromaManager {
 
-    private static HypixelKentik main = HypixelKentik.getInstance();
+    private static Hyk main = Hyk.getInstance();
 
     @Getter private static boolean coloringTextChroma;
     private static float featureScale;

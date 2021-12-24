@@ -1,6 +1,6 @@
 package me.a0g.hyk.tweaker.asm.hooks;
 
-import me.a0g.hyk.HypixelKentik;
+import me.a0g.hyk.Hyk;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -11,8 +11,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
@@ -20,7 +20,7 @@ import java.nio.FloatBuffer;
 
 public class EntityRendererHook {
 
-    private static HypixelKentik main = HypixelKentik.getInstance();
+    private static Hyk main = Hyk.getInstance();
 
     public static void setupFog(int startCoords, float partialTicks) {
 
@@ -28,6 +28,7 @@ public class EntityRendererHook {
 
             return;
         }*/
+
 
         if(main.getHyConfig().isAntiblidness()){
 
@@ -113,6 +114,31 @@ public class EntityRendererHook {
         }
 
         return;
+    }
+
+    public static boolean setupFog2() {
+        if(main.getHyConfig().isAntifog()){
+            GlStateManager.enableColorMaterial();
+
+         //   GlStateManager.enableFog();
+            GlStateManager.disableFog();
+
+            GlStateManager.colorMaterial(1028, 4608);
+
+            return true;
+        }
+        return false;
+    }
+
+    //&& Hook.rech(***) - true ploxo
+
+    public static boolean rech(Vec3 vec3,Vec3 vec33) {
+        if(main.getHyConfig().isRech()){
+            if( vec3.distanceTo(vec33) <= main.getHyConfig().getRechr()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

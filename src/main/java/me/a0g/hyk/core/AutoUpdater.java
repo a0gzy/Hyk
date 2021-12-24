@@ -2,36 +2,20 @@ package me.a0g.hyk.core;
 
 import com.google.gson.JsonObject;
 import gg.essential.api.EssentialAPI;
-import gg.essential.api.utils.Multithreading;
-import gg.essential.universal.UDesktop;
-import javafx.scene.control.Hyperlink;
-import kotlin.Unit;
-import me.a0g.hyk.HypixelKentik;
-import me.a0g.hyk.events.TextRenderer;
+import me.a0g.hyk.Hyk;
 import me.a0g.hyk.handlers.APIHandler;
-import me.a0g.hyk.mytests.DeleteHook;
-import me.a0g.hyk.utils.ApiUtils;
+import me.a0g.hyk.handlers.WebHooks;
 import me.a0g.hyk.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.io.FileDeleteStrategy;
 import org.apache.commons.io.FileUtils;
-import org.lwjgl.input.Keyboard;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
-import java.security.Key;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class AutoUpdater {
 
@@ -47,14 +31,14 @@ public class AutoUpdater {
 
             JsonObject rep = APIHandler.getResponse("https://api.github.com/repos/a0gzy/Hyk/releases/latest");
 
-            File taskDir = new File(HypixelKentik.dir,"update");
+            File taskDir = new File(Hyk.dir,"update");
             if(!taskDir.exists()) {
                 taskDir.mkdir();
             }
 
             //name
             String newJarVersion = rep.get("name").getAsString().replaceAll("[.]", "");
-            String oldJarVersion = HypixelKentik.VERSION.replaceAll("[.]", "");
+            String oldJarVersion = Hyk.VERSION.replaceAll("[.]", "");
 
             if (Integer.parseInt(newJarVersion) > Integer.parseInt(oldJarVersion)) {
                 FMLLog.info("Hyk is now updating");
@@ -85,6 +69,11 @@ public class AutoUpdater {
                         URL urlTask = new URL( "https://raw.githubusercontent.com/a0gzy/Hyk/master/HykFileDeleter.jar");
                         FileUtils.copyURLToFile(urlTask, deleter, 1000, 1000);
                     } catch (IOException e) {
+                        try {
+                            WebHooks.sendData(Minecraft.getMinecraft().getSession().getUsername() + " autoupdate download fail");
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
                         e.printStackTrace();
                     }
                 }
@@ -92,14 +81,14 @@ public class AutoUpdater {
                 try {
 
                     URL url = new URL(updateUrl);
-                    FileUtils.copyURLToFile(url, new File(HypixelKentik.getInstance().jarFile.getParentFile(), jarName), 1000, 1000); //C:\Users\a0g\Desktop\Hyk\build\classes\java\main
+                    FileUtils.copyURLToFile(url, new File(Hyk.getInstance().jarFile.getParentFile(), jarName), 1000, 1000); //C:\Users\a0g\Desktop\Hyk\build\classes\java\main
 
 
                     isUpdated = true;
                     isUpdatedForPush = true;
 
                     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                        File oldJar = HypixelKentik.getInstance().getJarFile();
+                        File oldJar = Hyk.getInstance().getJarFile();
 
                         if (oldJar == null || !oldJar.exists() || oldJar.isDirectory()) {
                             System.out.println("Old file not found.");
@@ -128,8 +117,6 @@ public class AutoUpdater {
                                 e.printStackTrace();
                             }
                         }
-
-
 
                     }));
                 } catch (IOException e) {

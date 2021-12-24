@@ -5,6 +5,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.util.StringUtils;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
+
 public class TextRenderer extends Gui {
 
     public TextRenderer(Minecraft mc, String text, int x, int y, double scale) {
@@ -51,7 +53,9 @@ public class TextRenderer extends Gui {
                 mc.fontRendererObj.drawString(noColorLine, (int) Math.round(x / scale), (int) Math.round(y / scale) + 1, 0x000000, false);
                 mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), color, false);
             }
-            mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), color, true);
+            else {
+                mc.fontRendererObj.drawString(line, (int) Math.round(x / scale), (int) Math.round(y / scale), color, true);
+            }
         }
         GL11.glScaled(scaleReset, scaleReset, scaleReset);
     }
