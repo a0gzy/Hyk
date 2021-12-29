@@ -7,6 +7,7 @@ import me.a0g.hyk.chest.*;
 import me.a0g.hyk.config.HyConfig;
 import me.a0g.hyk.config.HykPos;
 import me.a0g.hyk.core.AutoUpdater;
+import me.a0g.hyk.core.features.AutoGame;
 import me.a0g.hyk.core.features.AutoMelody;
 import me.a0g.hyk.core.features.NoStonk;
 import me.a0g.hyk.core.features.Powder;
@@ -52,7 +53,7 @@ import java.util.Map;
 @Mod(modid = Hyk.MODID, version = Hyk.VERSION, name = Hyk.NAME)
 public class Hyk {
     public static final String MODID = "hyk";
-    public static final String VERSION = "3.1.2";
+    public static final String VERSION = "3.1.3";
     public static final String NAME = "HyK";
 
    // private final HyConfig hyConfig = new HyConfig();
@@ -196,6 +197,7 @@ public class Hyk {
         MinecraftForge.EVENT_BUS.register(new SwHook());
 
         MinecraftForge.EVENT_BUS.register(new Powder());
+        MinecraftForge.EVENT_BUS.register(new AutoGame());
 
         MinecraftForge.EVENT_BUS.register(newScheduler);
 

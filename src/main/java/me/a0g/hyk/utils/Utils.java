@@ -275,6 +275,7 @@ public class Utils {
     }
 
     public boolean checkHollows(){
+        if(main.isDev) return true;
         return getTabList().contains("Crystal Hollows");
     }
 
@@ -388,7 +389,7 @@ public class Utils {
     }
 
     public boolean checkForGame(String minigame) {
-
+        if(main.isDev) return true;
         Minecraft mc = Minecraft.getMinecraft();
         if (mc != null && mc.theWorld != null && !mc.isSingleplayer()) {
             ScoreObjective scoreboardObj = mc.theWorld.getScoreboard().getObjectiveInDisplaySlot(1);
@@ -489,7 +490,7 @@ public class Utils {
     }
 
     public boolean checkForIsland() {
-
+        if(main.isDev) return true;
         List<String> scoreboard = ScoreboardHandler.getSidebarLines();
             for (String s : scoreboard) {
                 String sCleaned = ScoreboardHandler.cleanSB(s);

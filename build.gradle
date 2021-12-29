@@ -2,9 +2,10 @@ plugins {
     id "java"
     id "com.github.johnrengelman.shadow" version "6.1.0"
     id "net.minecraftforge.gradle.forge" version "6f53277"
+    id "org.spongepowered.mixin" version "d5f9873d60"
 }
 
-version = "3.1.2"
+version = "3.1.3"
 group= "me.a0g"
 archivesBaseName = "hyk"
 
@@ -17,7 +18,7 @@ minecraft {
     runDir = "run"
     mappings = "stable_22"
     makeObfSourceJar = false
-    clientRunArgs += ["--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker"]
+    clientRunArgs += ["--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker","--mixin mixins.hyk.json"]
     clientJvmArgs += "-Dfml.coreMods.load=me.a0g.hyk.tweaker.ASMTweaker"
 }
 
@@ -30,7 +31,7 @@ repositories {
     //jcenter()
     mavenCentral()
     maven { url "https://repo.sk1er.club/repository/maven-public" }
-    maven { url 'https://repo.spongepowered.org/maven' }
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
     maven {
         name = "Jitpack"
         url = "https://jitpack.io/"
@@ -44,24 +45,20 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-    //compile  "club.minnced:java-discord-rpc:2.0.1"
 
-
-   /* implementation('com.github.jagrosh:DiscordIPC:e29d6d8') {
-        exclude module: 'log4j'
-    }
-*/
     embed('com.github.jagrosh:DiscordIPC:e29d6d8') {
         exclude module: 'log4j'
     }
 
-   // include fileTree('libs')
-
-   // embed "gg.essential:loader-launchwrapper:1.0.2"
-
     embed "gg.essential:loader-launchwrapper:1.1.2"
     implementation "gg.essential:essential-1.8.9-forge:1576+release-launch"
 
+    annotationProcessor 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    compileOnly 'org.spongepowered:mixin:0.7.11-SNAPSHOT'
+    /*annotationProcessor 'com.google.code.gson:gson:2.2.4'
+    annotationProcessor 'com.google.guava:guava:21.0'
+    annotationProcessor 'org.ow2.asm:asm-tree:6.2'
+    annotationProcessor 'org.apache.logging.log4j:log4j-core:2.0-beta9'*/
 }
 
 /**
@@ -86,10 +83,39 @@ processResources {
     }
 }
 
+/*
+ext {
+    mixinSrg = new File(project.buildDir, 'tmp/mixins/mixins.srg')
+    mixinRefMap = new File(project.buildDir, 'tmp/mixins/hyk.mixins.refmap.json')
+}
+
+compileJava {
+    options.compilerArgs += [
+            "-AoutSrgFile=${project.mixinSrg.canonicalPath}",
+            "-AoutRefMapFile=${project.mixinRefMap.canonicalPath}",
+            "-AreobfSrgFile=${project.file('build/mcp-srg.srg').canonicalPath}"
+    ]
+}
+*/
+
+mixin {
+    disableRefMapWarning = true
+    defaultObfuscationEnv searge
+    add sourceSets.main, "mixins.hyk.refmap.json"
+}
+
+/*task copySrg(type: Copy, dependsOn: 'genSrgs') {
+    from {project.tasks.genSrgs.mcpToSrg}
+    into 'build'
+}*/
+//compileJava.dependsOn copySrg
+
+//reobfJar.addSecondarySrgFile project.mixinSrg
+
 /**
  * This task simply moves resources so they can be accessed at runtime, Forge is quite weird isn't it
  */
-task moveResources {
+/*task moveResources {
     doLast {
         ant.move file: "${buildDir}/resources/main",
                 todir: "${buildDir}/classes/java"
@@ -97,7 +123,7 @@ task moveResources {
 }
 
 moveResources.dependsOn processResources
-classes.dependsOn moveResources
+classes.dependsOn moveResources*/
 
 jar {
     dependsOn configurations.embed
@@ -112,6 +138,7 @@ jar {
     }
 
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    //from files(project.mixinRefMap.canonicalPath)
     manifest {
         attributes(
                 "FMLCorePluginContainsFMLMod": "true",
@@ -120,7 +147,8 @@ jar {
                 "TweakClass": "gg.essential.loader.stage0.EssentialSetupTweaker",
                 "TweakOrder": "0",
                 "ModSide": "CLIENT",
-                "FMLAT": "hyk_at.cfg"
+                "FMLAT": "hyk_at.cfg",
+                'MixinConfigs': 'mixins.hyk.json'
         )
     }
    // enabled = false

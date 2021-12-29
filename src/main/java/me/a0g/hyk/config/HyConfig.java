@@ -396,12 +396,21 @@ public class HyConfig extends Vigilant {
     @Property(
             type = PropertyType.SWITCH,
             name = "Auto Game",
-            category = "SkyBlock",
+            category = "Other",
             subcategory = "Utils",
-            description = "auto game start.",
-            hidden = true
+            description = "auto game start."
     )
     private boolean autogame = false;
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "AutoGame Text",
+            category = "Other",
+            subcategory = "Utils",
+            description = "AutoGame text.",
+            placeholder = "/play build_battle_guess_the_build"
+    )
+    private String autoGameText = "/play build_battle_guess_the_build";
 
 
     @Property(

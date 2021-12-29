@@ -50,7 +50,7 @@ public class ClassTransformer implements IClassTransformer {
         registerTransformer(new EntityRendererTransformer());
         registerTransformer(new BlockTransformer());
         registerTransformer(new ChunkTransformer());
-        registerTransformer(new NetworkManagerTransformer());
+       // registerTransformer(new NetworkManagerTransformer());
     }
 
     private void registerTransformer(ITransformer transformer) {

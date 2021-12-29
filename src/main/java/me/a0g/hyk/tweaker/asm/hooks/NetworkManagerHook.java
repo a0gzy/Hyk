@@ -9,6 +9,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 public class NetworkManagerHook {
 
     public static void onReceivePacket(Packet<?> packet){
-        MinecraftForge.EVENT_BUS.post((Event)new ReceivePacketEvent(packet));
+        MinecraftForge.EVENT_BUS.post(new ReceivePacketEvent(packet));
     }
 }

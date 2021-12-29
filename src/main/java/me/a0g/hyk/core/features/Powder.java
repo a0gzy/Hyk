@@ -74,13 +74,13 @@ public class Powder {
     public void onParticle(ReceivePacketEvent event) {
         if(Minecraft.getMinecraft().thePlayer == null && Minecraft.getMinecraft().theWorld == null)
             return;
-        if(!main.getHyConfig().isAutoPowderChest() && !main.getUtils().checkHollows())
+        if(!main.getHyConfig().isAutoPowderChest() || !main.getUtils().checkHollows())//!true and !false
             return;
 
 
         if(event.packet instanceof S2APacketParticles && lastworked+6 < System.currentTimeMillis()) {
             lastworked = System.currentTimeMillis();
-           // FMLLog.info(System.currentTimeMillis() +  " ");
+
             S2APacketParticles packet = (S2APacketParticles)event.packet;
             if( packet.getParticleType().equals(EnumParticleTypes.CRIT)){
                 Vec3 particlePos = new Vec3(packet.getXCoordinate(), packet.getYCoordinate(), packet.getZCoordinate());
